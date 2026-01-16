@@ -1,6 +1,6 @@
 {
   "image": "mcr.microsoft.com/devcontainers/java:17",
-  "postCreateCommand": "cd /opt && wget 'https://github.com/wpilibsuite/vscode-wpilib/releases/download/v2026.1.1/vscode-wpilib-2026.1.1.vsix'",
+  "onCreateCommand": "cd ~ && wget -O wpilib.vsix 'https://github.com/wpilibsuite/vscode-wpilib/releases/download/v2026.1.1/vscode-wpilib-2026.1.1.vsix'",
   "features": {
     "ghcr.io/devcontainers/features/desktop-lite:1": {}
   },
@@ -15,7 +15,7 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "/opt/vscode-wpilib-2026.1.1.vsix",
+        "/home/vscode/wpilib.vsix",
         "vscjava.vscode-java-pack",
         "vscjava.vscode-gradle"
       ]
