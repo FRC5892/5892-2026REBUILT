@@ -12,6 +12,7 @@ import static frc.robot.subsystems.vision.VisionConstants.camera1Name;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera0;
 import static frc.robot.subsystems.vision.VisionConstants.robotToCamera1;
 
+import com.ctre.phoenix6.CANBus;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,10 +30,20 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.shooter.Flywheel;
+import frc.robot.subsystems.shooter.Hood;
+import frc.robot.subsystems.shooter.ShotCalculator;
+import frc.robot.subsystems.shooter.Turret;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.util.LoggedDIO.HardwareDIO;
+import frc.robot.util.LoggedDIO.NoOppDio;
+import frc.robot.util.LoggedDIO.SimDIO;
+import frc.robot.util.LoggedTalon.NoOppTalonFX;
+import frc.robot.util.LoggedTalon.PhoenixTalonFX;
+import frc.robot.util.LoggedTalon.SimpleMotorSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -42,9 +53,14 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private final CANBus rioCAN = new CANBus("rio");
   // Subsystems
   private final Drive drive;
   private final Vision vision;
+
+  private final Flywheel flywheel;
+  private final Hood hood;
+  private final Turret turret;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -54,6 +70,7 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    ShotCalculator calculator;
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -71,6 +88,20 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOLimelight(camera0Name, drive::getRotation),
                 new VisionIOLimelight(camera1Name, drive::getRotation));
+        calculator = new ShotCalculator(drive::getPose, drive::getChassisSpeeds);
+        flywheel = new Flywheel(new PhoenixTalonFX(0, rioCAN, "Flywheel"), calculator);
+        hood =
+            new Hood(
+                new PhoenixTalonFX(1, rioCAN, "Hood"),
+                new HardwareDIO("HoodReverse", 0),
+                new HardwareDIO("HoodForward", 1),
+                calculator);
+        turret =
+            new Turret(
+                new PhoenixTalonFX(2, rioCAN, "Turret"),
+                new HardwareDIO("TurretRevere", 2),
+                new HardwareDIO("TurretForward", 3),
+                calculator);
         break;
 
       case SIM:
@@ -87,6 +118,20 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
+        calculator = new ShotCalculator(drive::getPose, drive::getChassisSpeeds);
+        flywheel = new Flywheel(new SimpleMotorSim(0, rioCAN, "Flywheel", 5.862, 1), calculator);
+        hood =
+            new Hood(
+                new SimpleMotorSim(1, rioCAN, "Hood", 0.0017154536, 1.3),
+                new SimDIO("HoodReverse", SimDIO.fromNT("HoodReverse")),
+                new SimDIO("HoodForward", SimDIO.fromNT("HoodForward")),
+                calculator);
+        turret =
+            new Turret(
+                new SimpleMotorSim(2, rioCAN, "Turret", 0.0307668163, 9),
+                new SimDIO("TurretRevere", SimDIO.fromNT("TurretReverse")),
+                new SimDIO("TurretForward", SimDIO.fromNT("TurretForward")),
+                calculator);
         break;
 
       default:
@@ -99,6 +144,20 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        calculator = new ShotCalculator(drive::getPose, drive::getChassisSpeeds);
+        flywheel = new Flywheel(new NoOppTalonFX("Flywheel", 0), calculator);
+        hood =
+            new Hood(
+                new NoOppTalonFX("Hood", 0),
+                new NoOppDio("HoodReverse"),
+                new NoOppDio("HoodForward"),
+                calculator);
+        turret =
+            new Turret(
+                new NoOppTalonFX("Turret", 0),
+                new NoOppDio("TurretReverse"),
+                new NoOppDio("TurretForward"),
+                calculator);
 
         break;
     }
