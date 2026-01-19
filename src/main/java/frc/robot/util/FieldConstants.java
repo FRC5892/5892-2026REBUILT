@@ -9,6 +9,7 @@ package frc.robot.util;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -23,4 +24,6 @@ public class FieldConstants {
 
   public static final int aprilTagCount = fieldLayout.getTags().size();
   public static final double aprilTagWidth = Units.inchesToMeters(6.5);
+
+  public static final Translation2d hubCenter = new Translation2d(4.6256194, 4.0346376);
 }
