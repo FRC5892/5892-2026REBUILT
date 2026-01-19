@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -141,6 +142,20 @@ public abstract class LoggedTalonFX {
     return this;
   }
 
+  public boolean atSetpoint(Angle setpoint, Angle tolerance) {
+    return MathUtil.isNear(
+        setpoint.baseUnitMagnitude(),
+        getPosition().baseUnitMagnitude(),
+        tolerance.baseUnitMagnitude());
+  }
+
+  public boolean atSetpoint(AngularVelocity setpoint, AngularVelocity tolerance) {
+    return MathUtil.isNear(
+        setpoint.baseUnitMagnitude(),
+        getVelocity().baseUnitMagnitude(),
+        tolerance.baseUnitMagnitude());
+  }
+
   public abstract void setControl(ControlRequest controlRequest);
 
   protected abstract void updateInputs(TalonFXInputs inputs);
@@ -178,10 +193,10 @@ public abstract class LoggedTalonFX {
   }
 
   public Temperature getPrimaryTemperature() {
-    return getTempurature(0);
+    return getTemperature(0);
   }
 
-  public Temperature getTempurature(int follower) {
+  public Temperature getTemperature(int follower) {
     return Celsius.of(this.inputs.temperatureC[follower]);
   }
 
