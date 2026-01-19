@@ -46,8 +46,6 @@ import frc.robot.util.LocalADStarAK;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.BiConsumer;
-import lombok.Getter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -112,14 +110,6 @@ public class Drive extends SubsystemBase {
       new LoggedTunableNumber("Drive kS", TunerConstants.BackLeft.DriveMotorGains.kS);
   private final LoggedTunableNumber driveKVTunableNumber =
       new LoggedTunableNumber("Drive kV", TunerConstants.BackLeft.DriveMotorGains.kV);
-
-  @Getter @AutoLogOutput private int reefSector = -1;
-  @Getter @AutoLogOutput private double distanceToReefM = -1;
-
-  private BiConsumer<Double, Rotation2d> yawConsumer = null;
-
-  private static final LoggedTunableNumber teleopMaxSpeed =
-      new LoggedTunableNumber("Drive/teleopMaxSpeedPercent", 1);
 
   // End 5892
 
@@ -324,7 +314,7 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  private ChassisSpeeds getChassisSpeeds() {
+  public ChassisSpeeds getChassisSpeeds() {
     return kinematics.toChassisSpeeds(getModuleStates());
   }
 
