@@ -3,7 +3,6 @@ package frc.robot.util;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -33,7 +32,6 @@ public class MechanismUtil {
    * @param confirmPosition the minimum position to back off to. This is used in a simple bang-bang
    *     controller, so it is possible for the mechanism to move past this point. If {@code
    *     confirmVoltage} is 0 to disable confirmation, this value is unread and can be null
-   * @return
    */
   public static Command buildHomingCommand(
       LoggedTalonFX talonFX,
@@ -41,9 +39,9 @@ public class MechanismUtil {
       Subsystem subsystem,
       DoubleSupplier initialVoltage,
       boolean forward,
-      Supplier<MutAngle> switchPosition,
+      Supplier<Angle> switchPosition,
       DoubleSupplier confirmVoltage,
-      Supplier<MutAngle> confirmPosition) {
+      Supplier<Angle> confirmPosition) {
     VoltageOut out = new VoltageOut(0);
     NeutralOut neutral = new NeutralOut();
     Runnable towardPeriodic =
