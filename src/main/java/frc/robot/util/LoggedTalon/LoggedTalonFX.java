@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.Alert;
@@ -156,12 +158,78 @@ public abstract class LoggedTalonFX {
         tolerance.baseUnitMagnitude());
   }
 
+  /**
+   * Build a standard config with a few commonly adjusted values
+   *
+   * @param statorCurrentLimit Stator current limit in amps This limit directly affects max torque
+   * @param supplyCurrentLimit Supply current limit in amps This limit affects brownouts and battery
+   *     usage
+   * @param invert Motor direction. Default: CCW positive
+   * @param neutralMode Neutral mode. Default: Coast
+   * @return the built config
+   */
+  public static TalonFXConfiguration buildStandardConfig(
+      double statorCurrentLimit,
+      double supplyCurrentLimit,
+      InvertedValue invert,
+      NeutralModeValue neutralMode) {
+    var config = new TalonFXConfiguration();
+    config.CurrentLimits.StatorCurrentLimit = statorCurrentLimit;
+    config.CurrentLimits.SupplyCurrentLimit = supplyCurrentLimit;
+    config.MotorOutput.Inverted = invert;
+    config.MotorOutput.NeutralMode = neutralMode;
+    return config;
+  }
+
+  /**
+   * Build a standard config with a few commonly adjusted values The NeutralMode is Coast
+   *
+   * @param statorCurrentLimit Stator current limit in amps This limit directly affects max torque
+   * @param supplyCurrentLimit Supply current limit in amps This limit affects brownouts and battery
+   *     usage
+   * @param invert Motor direction. Default: CCW positive
+   * @return the built config
+   */
+  public static TalonFXConfiguration buildStandardConfig(
+      double statorCurrentLimit, double supplyCurrentLimit, InvertedValue invert) {
+    return LoggedTalonFX.buildStandardConfig(
+        statorCurrentLimit, supplyCurrentLimit, invert, NeutralModeValue.Coast);
+  }
+
+  /**
+   * Build a standard config with a few commonly adjusted values The InvertValue is CCW positive
+   *
+   * @param statorCurrentLimit Stator current limit in amps This limit directly affects max torque
+   * @param supplyCurrentLimit Supply current limit in amps This limit affects brownouts and battery
+   *     usage
+   * @param neutralMode Neutral mode. Default: Coast
+   * @return the built config
+   */
+  public static TalonFXConfiguration buildStandardConfig(
+      double statorCurrentLimit, double supplyCurrentLimit, NeutralModeValue neutralMode) {
+    return LoggedTalonFX.buildStandardConfig(
+        statorCurrentLimit,
+        supplyCurrentLimit,
+        InvertedValue.CounterClockwise_Positive,
+        neutralMode);
+  }
+
+  public static TalonFXConfiguration buildStandardConfig(
+      double statorCurrentLimit, double supplyCurrentLimit) {
+    return LoggedTalonFX.buildStandardConfig(
+        statorCurrentLimit,
+        supplyCurrentLimit,
+        InvertedValue.CounterClockwise_Positive,
+        NeutralModeValue.Coast);
+  }
+
   public abstract void setControl(ControlRequest controlRequest);
 
   protected abstract void updateInputs(TalonFXInputs inputs);
 
   /**
    * Apply a config until it succeeds.
+   *
    * @param config the config to apply
    * @return this for daisy-chaining
    */
