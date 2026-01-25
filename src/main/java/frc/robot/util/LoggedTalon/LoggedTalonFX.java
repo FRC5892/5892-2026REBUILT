@@ -160,6 +160,11 @@ public abstract class LoggedTalonFX {
 
   protected abstract void updateInputs(TalonFXInputs inputs);
 
+  /**
+   * Apply a config until it succeeds.
+   * @param config the config to apply
+   * @return this for daisy-chaining
+   */
   public abstract LoggedTalonFX withConfig(TalonFXConfiguration config);
 
   /**
