@@ -93,17 +93,17 @@ public class ShotCalculator {
     double turretToTargetDistance = target.getDistance(turretPosition.getTranslation());
 
     // Calculate field relative turret velocity
-    double robotAngle = robotPose.getRotation().getRadians();
+    Rotation2d robotAngle = robotPose.getRotation();
     double turretVelocityX =
         robotVelocity.vxMetersPerSecond
             + robotVelocity.omegaRadiansPerSecond
-                * (robotToTurret.getY() * Math.cos(robotAngle)
-                    - robotToTurret.getX() * Math.sin(robotAngle));
+                * (robotToTurret.getY() * robotAngle.getCos()
+                    - robotToTurret.getX() * robotAngle.getSin());
     double turretVelocityY =
         robotVelocity.vyMetersPerSecond
             + robotVelocity.omegaRadiansPerSecond
-                * (robotToTurret.getX() * Math.cos(robotAngle)
-                    - robotToTurret.getY() * Math.sin(robotAngle));
+                * (robotToTurret.getX() * robotAngle.getCos()
+                    - robotToTurret.getY() * robotAngle.getSin());
 
     // Account for imparted velocity by robot (turret) to offset
     double timeOfFlight = timeOfFlightMap.get(turretToTargetDistance);
