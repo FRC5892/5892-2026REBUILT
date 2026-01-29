@@ -19,13 +19,7 @@ import frc.robot.util.LoggedTunableMeasure;
 import frc.robot.util.LoggedTunableNumber;
 
 public class Turret extends GenericPositionMechanismSubsystem {
-  private final ShotCalculator calculator;
-
-  public Turret(
-      LoggedTalonFX motor,
-      LoggedDIO reverseLimit,
-      LoggedDIO forwardLimit,
-      ShotCalculator calculator) {
+  public Turret(LoggedTalonFX motor, LoggedDIO reverseLimit, LoggedDIO forwardLimit) {
     super(
         "Turret",
         motor,
@@ -36,7 +30,6 @@ public class Turret extends GenericPositionMechanismSubsystem {
         new LoggedTunableMeasure<>("Turret/Homing/homePosition", Rotations.mutable(0))::get,
         new LoggedTunableMeasure<>("Turret/Homing/homePosition", Rotations.mutable(0.1))::get,
         new LoggedTunableMeasure<>("Turret/Tolerance", Degrees.mutable(5))::get);
-    this.calculator = calculator;
     var config =
         new TalonFXConfiguration()
             .withSlot0(new Slot0Configs().withKP(0).withKI(0).withKD(0).withKS(0).withKV(0))
@@ -58,13 +51,13 @@ public class Turret extends GenericPositionMechanismSubsystem {
     return run(
         () -> {
           if (homed) {
-            this.requestPosition(calculator.calculateShot().hoodAngle());
+            this.requestPosition(ShotCalculator.calculateShot().hoodAngle());
           }
         });
   }
 
   @Override
   protected void periodicUser() {
-    calculator.clearCache();
+    ShotCalculator.clearCache();
   }
 }

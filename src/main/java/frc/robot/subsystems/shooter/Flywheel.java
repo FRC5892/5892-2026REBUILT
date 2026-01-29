@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -15,7 +16,6 @@ import org.littletonrobotics.junction.AutoLogOutput;
 public class Flywheel extends SubsystemBase {
 
   private final LoggedTalonFX motor;
-  private final ShotCalculator calculator;
 
   private final MotionMagicVelocityTorqueCurrentFOC mmControl =
       new MotionMagicVelocityTorqueCurrentFOC(0);
@@ -23,9 +23,8 @@ public class Flywheel extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngularVelocity> tolerance =
       new LoggedTunableMeasure<>("Flywheel/Tolerance", RPM.mutable(5));
 
-  public Flywheel(LoggedTalonFX motor, ShotCalculator calculator) {
+  public Flywheel(LoggedTalonFX motor) {
     this.motor = motor;
-    this.calculator = calculator;
     setDefaultCommand(aimCommand());
   }
 
@@ -36,7 +35,8 @@ public class Flywheel extends SubsystemBase {
   public Command aimCommand() {
     return run(
         () -> {
-          setSetpoint(calculator.calculateShot().flywheelSpeed());
+          setSetpoint(
+              RotationsPerSecond.of(ShotCalculator.calculateShot().flywheelSpeedRotPerSec()));
         });
   }
 
@@ -44,6 +44,6 @@ public class Flywheel extends SubsystemBase {
   public void periodic() {
     motor.periodic();
     atSetpoint = motor.atSetpoint(mmControl.getVelocityMeasure(), tolerance.get());
-    calculator.clearCache();
+    ShotCalculator.clearCache();
   }
 }

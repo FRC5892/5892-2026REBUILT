@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -17,40 +16,31 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import frc.robot.Robot;
+import frc.robot.RobotState;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
-import java.util.function.Supplier;
-import lombok.RequiredArgsConstructor;
 import org.littletonrobotics.junction.Logger;
 
 /** Thank you so much 6328! */
-@RequiredArgsConstructor
 public class ShotCalculator {
   private static final Transform2d robotToTurret = new Transform2d();
 
-  private final LinearFilter turretAngleFilter =
-      LinearFilter.movingAverage((int) (0.1 / Robot.defaultPeriodSecs));
-  private final LinearFilter hoodAngleFilter =
-      LinearFilter.movingAverage((int) (0.1 / Robot.defaultPeriodSecs));
+  //   private static final LinearFilter turretAngleFilter =
+  //       LinearFilter.movingAverage((int) (0.1 / Robot.defaultPeriodSecs));
+  //   private static final LinearFilter hoodAngleFilter =
+  //       LinearFilter.movingAverage((int) (0.1 / Robot.defaultPeriodSecs));
 
-  private Rotation2d lastTurretAngle;
-  private double lastHoodAngle;
-  private Rotation2d turretAngle;
-  private double hoodAngle = Double.NaN;
-  private double turretVelocity;
-  private double hoodVelocity;
+  private static Rotation2d turretAngle;
+  private static Rotation2d hoodAngle = Rotation2d.k180deg;
 
   public record ShotParameters(
       boolean isValid,
       Rotation2d turretAngle,
-      double turretVelocity,
-      double hoodAngle,
-      double hoodVelocity,
-      double flywheelSpeed) {}
+      Rotation2d hoodAngle,
+      double flywheelSpeedRotPerSec) {}
 
   // Cache parameters
-  private ShotParameters latestShot = null;
+  private static ShotParameters latestShot = null;
 
   private static double minDistance;
   private static double maxDistance;
@@ -80,6 +70,7 @@ public class ShotCalculator {
     shotHoodAngleMap.put(5.57, Rotation2d.fromDegrees(32.0));
     shotHoodAngleMap.put(5.60, Rotation2d.fromDegrees(35.0));
 
+    // Looks like rad per sec, We are actually using Rot Per Sec
     shotFlywheelSpeedMap.put(1.34, 210.0);
     shotFlywheelSpeedMap.put(1.78, 220.0);
     shotFlywheelSpeedMap.put(2.17, 220.0);
@@ -98,17 +89,14 @@ public class ShotCalculator {
     timeOfFlightMap.put(1.38, 0.90);
   }
 
-  private final Supplier<Pose2d> robotPoseSup;
-  private final Supplier<ChassisSpeeds> robotVelocitySup;
-
-  public ShotParameters calculateShot() {
+  public static ShotParameters calculateShot() {
     if (latestShot != null) {
       return latestShot;
     }
 
     // Calculate estimated pose while accounting for phase delay
-    Pose2d estimatedPose = this.robotPoseSup.get();
-    ChassisSpeeds robotRelativeVelocity = this.robotVelocitySup.get();
+    Pose2d estimatedPose = RobotState.getInstance().getRobotPosition();
+    ChassisSpeeds robotRelativeVelocity = RobotState.getInstance().getRobotRelativeVelocity();
     ChassisSpeeds robotVelocity =
         ChassisSpeeds.fromFieldRelativeSpeeds(robotRelativeVelocity, estimatedPose.getRotation());
     estimatedPose =
@@ -153,23 +141,13 @@ public class ShotCalculator {
 
     // Calculate parameters accounted for imparted velocity
     turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
-    hoodAngle = shotHoodAngleMap.get(lookaheadTurretToTargetDistance).getRadians();
-    if (lastTurretAngle == null) lastTurretAngle = turretAngle;
-    if (Double.isNaN(lastHoodAngle)) lastHoodAngle = hoodAngle;
-    turretVelocity =
-        turretAngleFilter.calculate(
-            turretAngle.minus(lastTurretAngle).getRadians() / Robot.defaultPeriodSecs);
-    hoodVelocity = hoodAngleFilter.calculate((hoodAngle - lastHoodAngle) / Robot.defaultPeriodSecs);
-    lastTurretAngle = turretAngle;
-    lastHoodAngle = hoodAngle;
+    hoodAngle = shotHoodAngleMap.get(lookaheadTurretToTargetDistance);
     latestShot =
         new ShotParameters(
             lookaheadTurretToTargetDistance >= minDistance
                 && lookaheadTurretToTargetDistance <= maxDistance,
             turretAngle,
-            turretVelocity,
             hoodAngle,
-            hoodVelocity,
             shotFlywheelSpeedMap.get(lookaheadTurretToTargetDistance));
 
     // Log calculated values
@@ -179,7 +157,7 @@ public class ShotCalculator {
     return latestShot;
   }
 
-  public void clearCache() {
+  public static void clearCache() {
     latestShot = null;
   }
 }

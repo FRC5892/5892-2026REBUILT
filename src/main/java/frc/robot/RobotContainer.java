@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ShootCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -30,20 +31,12 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
-import frc.robot.subsystems.shooter.Flywheel;
-import frc.robot.subsystems.shooter.Hood;
-import frc.robot.subsystems.shooter.ShotCalculator;
-import frc.robot.subsystems.shooter.Turret;
+import frc.robot.subsystems.indexer.*;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.util.LoggedDIO.HardwareDIO;
-import frc.robot.util.LoggedDIO.NoOppDio;
-import frc.robot.util.LoggedDIO.SimDIO;
-import frc.robot.util.LoggedTalon.NoOppTalonFX;
-import frc.robot.util.LoggedTalon.PhoenixTalonFX;
-import frc.robot.util.LoggedTalon.SimpleMotorSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -58,9 +51,8 @@ public class RobotContainer {
   private final Drive drive;
   private final Vision vision;
 
-  private final Flywheel flywheel;
-  private final Hood hood;
-  private final Turret turret;
+  private final Indexer indexer;
+  private final Shooter shooter;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -70,7 +62,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    ShotCalculator calculator;
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
@@ -88,20 +79,6 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOLimelight(camera0Name, drive::getRotation),
                 new VisionIOLimelight(camera1Name, drive::getRotation));
-        calculator = new ShotCalculator(drive::getPose, drive::getChassisSpeeds);
-        flywheel = new Flywheel(new PhoenixTalonFX(0, rioCAN, "Flywheel"), calculator);
-        hood =
-            new Hood(
-                new PhoenixTalonFX(1, rioCAN, "Hood"),
-                new HardwareDIO("HoodReverse", 0),
-                new HardwareDIO("HoodForward", 1),
-                calculator);
-        turret =
-            new Turret(
-                new PhoenixTalonFX(2, rioCAN, "Turret"),
-                new HardwareDIO("TurretRevere", 2),
-                new HardwareDIO("TurretForward", 3),
-                calculator);
         break;
 
       case SIM:
@@ -118,20 +95,6 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose),
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
-        calculator = new ShotCalculator(drive::getPose, drive::getChassisSpeeds);
-        flywheel = new Flywheel(new SimpleMotorSim(0, rioCAN, "Flywheel", 5.862, 1), calculator);
-        hood =
-            new Hood(
-                new SimpleMotorSim(1, rioCAN, "Hood", 0.0017154536, 1.3),
-                new SimDIO("HoodReverse", SimDIO.fromNT("HoodReverse")),
-                new SimDIO("HoodForward", SimDIO.fromNT("HoodForward")),
-                calculator);
-        turret =
-            new Turret(
-                new SimpleMotorSim(2, rioCAN, "Turret", 0.0307668163, 9),
-                new SimDIO("TurretRevere", SimDIO.fromNT("TurretReverse")),
-                new SimDIO("TurretForward", SimDIO.fromNT("TurretForward")),
-                calculator);
         break;
 
       default:
@@ -144,23 +107,10 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
-        calculator = new ShotCalculator(drive::getPose, drive::getChassisSpeeds);
-        flywheel = new Flywheel(new NoOppTalonFX("Flywheel", 0), calculator);
-        hood =
-            new Hood(
-                new NoOppTalonFX("Hood", 0),
-                new NoOppDio("HoodReverse"),
-                new NoOppDio("HoodForward"),
-                calculator);
-        turret =
-            new Turret(
-                new NoOppTalonFX("Turret", 0),
-                new NoOppDio("TurretReverse"),
-                new NoOppDio("TurretForward"),
-                calculator);
-
         break;
     }
+    indexer = new Indexer(rioCAN);
+    shooter = new Shooter(rioCAN);
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
@@ -200,22 +150,9 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    // Lock to 0° when A button is held
-    controller
-        .a()
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> -controller.getLeftY(),
-                () -> -controller.getLeftX(),
-                () -> Rotation2d.kZero));
-
-    // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-
     // Reset gyro to 0° when B button is pressed
     controller
-        .b()
+        .y()
         .onTrue(
             Commands.runOnce(
                     () ->
@@ -223,6 +160,7 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), Rotation2d.kZero)),
                     drive)
                 .ignoringDisable(true));
+    controller.a().onTrue(ShootCommands.shoot(indexer, shooter));
   }
 
   /**

@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import frc.robot.RobotState;
 import frc.robot.generated.TunerConstants;
 import frc.robot.util.LocalADStarAK;
 import frc.robot.util.LoggedTunableNumber;
@@ -230,6 +231,9 @@ public class Drive extends SubsystemBase {
 
     // Update gyro alert
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
+
+    RobotState.getInstance().setRobotRelativeVelocity(getChassisSpeeds());
+    RobotState.getInstance().setRobotPosition(getPose());
   }
 
   /**

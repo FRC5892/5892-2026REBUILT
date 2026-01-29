@@ -11,7 +11,12 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import frc.robot.RobotState;
 import frc.robot.util.GenericPositionMechanismSubsystem;
 import frc.robot.util.LoggedDIO.LoggedDIO;
 import frc.robot.util.LoggedTalon.LoggedTalonFX;
@@ -19,13 +24,10 @@ import frc.robot.util.LoggedTunableMeasure;
 import frc.robot.util.LoggedTunableNumber;
 
 public class Hood extends GenericPositionMechanismSubsystem {
-  private final ShotCalculator calculator;
+  private final LoggedTunableMeasure<MutAngle> stowPosition =
+      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(0));
 
-  public Hood(
-      LoggedTalonFX motor,
-      LoggedDIO reverseLimit,
-      LoggedDIO forwardLimit,
-      ShotCalculator calculator) {
+  public Hood(LoggedTalonFX motor, LoggedDIO reverseLimit, LoggedDIO forwardLimit) {
     super(
         "Hood",
         motor,
@@ -36,7 +38,6 @@ public class Hood extends GenericPositionMechanismSubsystem {
         new LoggedTunableMeasure<>("Hood/Homing/homePosition", Rotations.mutable(0))::get,
         new LoggedTunableMeasure<>("Hood/Homing/homePosition", Rotations.mutable(0.1))::get,
         new LoggedTunableMeasure<>("Hood/Tolerance", Degrees.mutable(5))::get);
-    this.calculator = calculator;
     var config =
         new TalonFXConfiguration()
             .withSlot0(new Slot0Configs().withKP(0).withKI(0).withKD(0).withKS(0).withKV(0))
@@ -58,13 +59,27 @@ public class Hood extends GenericPositionMechanismSubsystem {
     return run(
         () -> {
           if (homed) {
-            this.requestPosition(calculator.calculateShot().hoodAngle());
+            this.requestPosition(ShotCalculator.calculateShot().hoodAngle());
           }
         });
   }
 
+  public Command stowCommand() {
+    return startEnd(
+            () -> {
+              this.requestPosition(new Rotation2d(stowPosition.get()));
+            },
+            null)
+        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+  }
+
+  public boolean shouldStow() {
+    final Pose2d pose = RobotState.getInstance().getRobotPosition();
+    throw new RuntimeException("Unimplemented");
+  }
+
   @Override
   protected void periodicUser() {
-    calculator.clearCache();
+    ShotCalculator.clearCache();
   }
 }

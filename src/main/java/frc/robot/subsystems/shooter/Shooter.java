@@ -15,29 +15,27 @@ public class Shooter {
   @Getter private final Flywheel flywheel;
   @Getter private final Hood hood;
   @Getter private final Turret turret;
-  @Getter private final ShotCalculator calculator;
 
-  public Shooter(CANBus bus, ShotCalculator calculator) {
-    this.calculator = calculator;
+  public Shooter(CANBus bus) {
     switch (Constants.currentMode) {
       case REAL -> {
         flywheel =
             new Flywheel(
                 new PhoenixTalonFX(
-                    25, bus, "Flywheel", new PhoenixTalonFollower(26, MotorAlignmentValue.Aligned)),
-                calculator);
+                    25,
+                    bus,
+                    "Flywheel",
+                    new PhoenixTalonFollower(26, MotorAlignmentValue.Aligned)));
         hood =
             new Hood(
                 new PhoenixTalonFX(27, bus, "Hood"),
                 new HardwareDIO("HoodReverse", 1),
-                new HardwareDIO("HoodForward", 2),
-                calculator);
+                new HardwareDIO("HoodForward", 2));
         turret =
             new Turret(
                 new PhoenixTalonFX(28, bus, "Turret"),
                 new HardwareDIO("TurretReverse", 2),
-                new HardwareDIO("TurretForward", 3),
-                calculator);
+                new HardwareDIO("TurretForward", 3));
       }
       case SIM -> {
         flywheel =
@@ -48,36 +46,33 @@ public class Shooter {
                     "Flywheel",
                     0.0007567661,
                     1 / 1.25,
-                    new PhoenixTalonFollower(26, MotorAlignmentValue.Aligned)),
-                calculator);
+                    new PhoenixTalonFollower(26, MotorAlignmentValue.Aligned)));
         hood =
             new Hood(
                 new SimpleMotorSim(27, bus, "Hood", 0.0017154536, 1.3),
                 new HardwareDIO("HoodReverse", 1),
-                new HardwareDIO("HoodForward", 2),
-                calculator);
+                new HardwareDIO("HoodForward", 2));
         turret =
             new Turret(
                 new SimpleMotorSim(28, bus, "Turret", 0.0307668163, 1.25),
                 new HardwareDIO("TurretReverse", 2),
-                new HardwareDIO("TurretForward", 3),
-                calculator);
+                new HardwareDIO("TurretForward", 3));
       }
       default -> {
-        flywheel = new Flywheel(new NoOppTalonFX("Flywheel", 1), calculator);
+        flywheel = new Flywheel(new NoOppTalonFX("Flywheel", 1));
         hood =
             new Hood(
                 new NoOppTalonFX("Hood", 0),
                 new HardwareDIO("HoodReverse", 1),
-                new HardwareDIO("HoodForward", 2),
-                calculator);
+                new HardwareDIO("HoodForward", 2));
         turret =
             new Turret(
                 new NoOppTalonFX("Turret", 0),
                 new HardwareDIO("TurretReverse", 2),
-                new HardwareDIO("TurretForward", 3),
-                calculator);
+                new HardwareDIO("TurretForward", 3));
       }
     }
+
+    hood.stowCommand();
   }
 }
