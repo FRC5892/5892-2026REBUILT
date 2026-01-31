@@ -11,10 +11,15 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rectangle2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotState;
 import frc.robot.util.FieldConstants.LinesHorizontal;
 import frc.robot.util.FieldConstants.LinesVertical;
 import frc.robot.util.GenericPositionMechanismSubsystem;
@@ -26,10 +31,11 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 public class Hood extends GenericPositionMechanismSubsystem {
   private final LoggedTunableMeasure<MutAngle> stowPosition =
-      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(0));
+      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(15));
 
   @AutoLogOutput(key = "Hood/trenchAreas")
-  public static final Rectangle2d[] trenchAreas = {
+  public static final Rectangle2d[]
+      trenchAreas = { // For bonus points allow the trench area to be expanded by hardcoded constant
     new Rectangle2d(
         new Translation2d(LinesVertical.starting, LinesHorizontal.leftTrenchOpenStart),
         new Translation2d(LinesVertical.neutralZoneNear, LinesHorizontal.leftTrenchOpenEnd)),
@@ -74,6 +80,7 @@ public class Hood extends GenericPositionMechanismSubsystem {
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(15));
     motor.withConfig(config).withMMPIDTuning(config);
     setDefaultCommand(aimCommand());
+    new Trigger(this::shouldStow).whileTrue(stowCommand());
   }
 
   public Command aimCommand() {
@@ -85,19 +92,25 @@ public class Hood extends GenericPositionMechanismSubsystem {
         });
   }
 
-  // public Command stowCommand() {
-  //   return startEnd(
-  //           () -> {
-  //             this.requestPosition(new Rotation2d(stowPosition.get()));
-  //           },
-  //           null)
-  //       .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
-  // }
+  public Command stowCommand() {
+    return startEnd(
+            () -> {
+              this.requestPosition(new Rotation2d(stowPosition.get()));
+            },
+            () -> {})
+        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+  }
 
-  // public boolean shouldStow() {
-  //   final Pose2d pose = RobotState.getInstance().getRobotPosition();
-  //   throw new RuntimeException("Unimplemented");
-  // }
+  @AutoLogOutput(key = "Hood/ShouldStow")
+  public boolean shouldStow() {
+    final Pose2d pose = RobotState.getInstance().getRobotPosition();
+    for (int i = 0; i < trenchAreas.length; i++) {
+      if (trenchAreas[i].contains(pose.getTranslation())) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   @Override
   protected void periodicUser() {
