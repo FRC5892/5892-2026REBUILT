@@ -167,8 +167,6 @@ public class FieldConstants {
   /** Left Trench related constants */
   public static class LeftTrench {
     // Dimensions
-    // Starting zone, neutral zone, trenchopenstart, trenchOpenEnd
-
     public static final double width = Units.inchesToMeters(65.65);
     public static final double depth = Units.inchesToMeters(47.0);
     public static final double height = Units.inchesToMeters(40.25);
