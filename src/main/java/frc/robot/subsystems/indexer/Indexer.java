@@ -10,6 +10,7 @@ import frc.robot.util.LoggedDIO.SimDIO;
 import frc.robot.util.LoggedTalon.NoOppTalonFX;
 import frc.robot.util.LoggedTalon.PhoenixTalonFX;
 import frc.robot.util.LoggedTalon.SimpleMotorSim;
+import frc.robot.util.LoggedTalon.TalonFlywheelSim;
 import frc.robot.util.RollerSubsystem.Direction;
 import lombok.Getter;
 
@@ -32,12 +33,12 @@ public class Indexer {
         spindexer = new Spindexer(new PhoenixTalonFX(22, canBus, "Spindexer"));
       }
       case SIM -> {
-        kicker = new Kicker(new SimpleMotorSim(20, canBus, "Kicker", 0, 1));
+        kicker = new Kicker(new TalonFlywheelSim(20, canBus, "Kicker", 0.5, 1));
         rollers =
             new Rollers(
-                new SimpleMotorSim(21, canBus, "Rollers", 0, 1),
+                new SimpleMotorSim(21, canBus, "Rollers", 0.5, 1),
                 new SimDIO("RollerBeam", SimDIO.fromNT("RollerBeam")));
-        spindexer = new Spindexer(new SimpleMotorSim(22, canBus, "Spindexer", 0, 1));
+        spindexer = new Spindexer(new SimpleMotorSim(22, canBus, "Spindexer", 0.5, 1));
       }
       default -> {
         kicker = new Kicker(new NoOppTalonFX("Kicker", 0));

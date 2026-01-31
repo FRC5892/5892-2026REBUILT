@@ -40,6 +40,7 @@ public class UnitNetworkNumber extends LoggedNetworkInput implements DoubleSuppl
   public UnitNetworkNumber(String key, String unitString) {
     this.key = key;
     var topic = NetworkTableInstance.getDefault().getDoubleTopic(key);
+    topic.publish();
     if (!unitString.isEmpty()) {
       topic.setProperty("unit", "\"" + unitString + "\"");
     }

@@ -11,12 +11,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import frc.robot.RobotState;
 import frc.robot.util.GenericPositionMechanismSubsystem;
 import frc.robot.util.LoggedDIO.LoggedDIO;
 import frc.robot.util.LoggedTalon.LoggedTalonFX;
@@ -64,19 +60,19 @@ public class Hood extends GenericPositionMechanismSubsystem {
         });
   }
 
-  public Command stowCommand() {
-    return startEnd(
-            () -> {
-              this.requestPosition(new Rotation2d(stowPosition.get()));
-            },
-            null)
-        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
-  }
+  // public Command stowCommand() {
+  //   return startEnd(
+  //           () -> {
+  //             this.requestPosition(new Rotation2d(stowPosition.get()));
+  //           },
+  //           null)
+  //       .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+  // }
 
-  public boolean shouldStow() {
-    final Pose2d pose = RobotState.getInstance().getRobotPosition();
-    throw new RuntimeException("Unimplemented");
-  }
+  // public boolean shouldStow() {
+  //   final Pose2d pose = RobotState.getInstance().getRobotPosition();
+  //   throw new RuntimeException("Unimplemented");
+  // }
 
   @Override
   protected void periodicUser() {
