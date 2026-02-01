@@ -25,7 +25,7 @@ public class SimpleMotorSim extends BaseTalonFXSim {
   }
 
   @Override
-  protected void simulationPeriodic(TalonFXInputs inputs) {
+  protected void simulationPeriodic(TalonInputs inputs) {
     motorSim.setInputVoltage(motorSimState.getMotorVoltage());
     motorSim.update(0.02);
     motorSimState.setRotorVelocity(motorSim.getAngularVelocity());

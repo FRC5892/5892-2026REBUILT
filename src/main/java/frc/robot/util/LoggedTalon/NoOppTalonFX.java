@@ -17,7 +17,7 @@ public class NoOppTalonFX extends LoggedTalonFX {
   public void setControl(ControlRequest controlRequest) {}
 
   @Override
-  protected void updateInputs(TalonFXInputs inputs) {}
+  protected void updateInputs(TalonInputs inputs) {}
 
   @Override
   public LoggedTalonFX withConfig(TalonFXConfiguration config) {

@@ -76,7 +76,7 @@ public class PhoenixTalonFX extends LoggedTalonFX {
   }
 
   @Override
-  protected void updateInputs(TalonFXInputs inputs) {
+  protected void updateInputs(TalonInputs inputs) {
     for (int i = 0; i <= super.followers; i++) {
       inputs.connected[i] =
           connectionDebouncer[i].calculate(

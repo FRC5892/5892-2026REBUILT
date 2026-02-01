@@ -24,7 +24,7 @@ import org.littletonrobotics.junction.Logger;
  */
 public abstract class LoggedTalonFX {
   protected final String name;
-  private final TalonFXInputsAutoLogged inputs = new TalonFXInputsAutoLogged();
+  private final TalonInputsAutoLogged inputs = new TalonInputsAutoLogged();
   private final Alert[] connectionAlerts;
   private boolean pidTuning = false;
   private boolean mmTuning = false;
@@ -227,7 +227,7 @@ public abstract class LoggedTalonFX {
 
   public abstract void setControl(ControlRequest controlRequest);
 
-  protected abstract void updateInputs(TalonFXInputs inputs);
+  protected abstract void updateInputs(TalonInputs inputs);
 
   /**
    * Apply a config until it succeeds.
