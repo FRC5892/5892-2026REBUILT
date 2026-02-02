@@ -139,7 +139,8 @@ public class ShotCalculator {
     }
 
     // Calculate parameters accounted for imparted velocity
-    turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
+    turretAngle =
+        target.minus(lookaheadPose.getTranslation()).getAngle().minus(lookaheadPose.getRotation());
     hoodAngle = shotHoodAngleMap.get(lookaheadTurretToTargetDistance);
     latestShot =
         new ShotParameters(
@@ -150,6 +151,7 @@ public class ShotCalculator {
             shotFlywheelSpeedMap.get(lookaheadTurretToTargetDistance));
 
     // Log calculated values
+    Logger.recordOutput("ShotCalculator/LatestShot", latestShot);
     Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
     Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
 
