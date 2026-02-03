@@ -101,7 +101,7 @@ public class Turret extends SubsystemBase {
     return run(
         () -> {
           if (homed) {
-            this.requestPosition(ShotCalculator.calculateShot().hoodAngle().getMeasure());
+            this.requestPosition(ShotCalculator.calculateShot().turretAngle().getMeasure());
           }
         });
   }
@@ -143,7 +143,7 @@ public class Turret extends SubsystemBase {
 
     targetPosition.mut_setBaseUnitMagnitude(
         MathUtil.inputModulus(
-            position.baseUnitMagnitude() + Math.PI,
+            position.baseUnitMagnitude(),
             minAngle.get().baseUnitMagnitude(),
             maxAngle.get().baseUnitMagnitude()));
     positionControl = true;
@@ -181,7 +181,6 @@ public class Turret extends SubsystemBase {
     Logger.recordOutput("Turret/AtSetpoint", atSetpoint);
     Logger.recordOutput("Turret/Homed", homed);
     Logger.recordOutput("Turret/PositionControl", positionControl);
-    Logger.recordOutput("Turret/Target", targetPosition);
 
     setControl();
 
@@ -196,6 +195,7 @@ public class Turret extends SubsystemBase {
 
   private void setControl() {
     if (positionControl) {
+      Logger.recordOutput("Turret/Target", targetPosition);
       motor.setControl(
           mmControl
               .withPosition(targetPosition)
