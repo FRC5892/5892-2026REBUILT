@@ -97,7 +97,7 @@ public class ShotCalculator {
     Pose2d estimatedPose = RobotState.getInstance().getRobotPosition();
     ChassisSpeeds robotRelativeVelocity = RobotState.getInstance().getRobotRelativeVelocity();
     ChassisSpeeds robotVelocity =
-        ChassisSpeeds.fromFieldRelativeSpeeds(robotRelativeVelocity, estimatedPose.getRotation());
+        ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeVelocity, estimatedPose.getRotation());
     estimatedPose =
         estimatedPose.exp(
             new Twist2d(
