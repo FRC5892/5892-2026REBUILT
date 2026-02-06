@@ -36,7 +36,8 @@ public class Flywheel extends SubsystemBase {
     return run(
         () -> {
           setSetpoint(
-              RotationsPerSecond.of(ShotCalculator.calculateShot().flywheelSpeedRotPerSec()));
+              RotationsPerSecond.of(
+                  ShotCalculator.getInstance().calculateShot().flywheelSpeedRotPerSec()));
         });
   }
 
@@ -44,6 +45,6 @@ public class Flywheel extends SubsystemBase {
   public void periodic() {
     motor.periodic();
     atSetpoint = motor.atSetpoint(mmControl.getVelocityMeasure(), tolerance.get());
-    ShotCalculator.clearCache();
+    ShotCalculator.getInstance().clearCache();
   }
 }

@@ -100,7 +100,8 @@ public class Turret extends SubsystemBase {
     return run(
         () -> {
           if (homed) {
-            this.requestPosition(ShotCalculator.calculateShot().turretAngle().getMeasure());
+            this.requestPosition(
+                ShotCalculator.getInstance().calculateShot().turretAngle().getMeasure());
           }
         });
   }
