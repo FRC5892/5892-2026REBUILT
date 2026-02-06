@@ -88,7 +88,7 @@ public class Hood extends GenericPositionMechanismSubsystem {
     return run(
         () -> {
           if (homed) {
-            this.requestPosition(ShotCalculator.calculateShot().hoodAngle());
+            this.requestPosition(ShotCalculator.getInstance().calculateShot().hoodAngle());
           }
         });
   }
@@ -115,6 +115,6 @@ public class Hood extends GenericPositionMechanismSubsystem {
 
   @Override
   protected void periodicUser() {
-    ShotCalculator.clearCache();
+    ShotCalculator.getInstance().clearCache();
   }
 }

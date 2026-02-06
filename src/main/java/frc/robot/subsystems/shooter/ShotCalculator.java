@@ -23,14 +23,19 @@ import org.littletonrobotics.junction.Logger;
 
 /** Thank you so much 6328! */
 public class ShotCalculator {
-  public static final Transform2d robotToTurret = new Transform2d();
-  //   private static final LinearFilter turretAngleFilter =
-  //       LinearFilter.movingAverage((int) (0.1 / Robot.defaultPeriodSecs));
-  //   private static final LinearFilter hoodAngleFilter =
-  //       LinearFilter.movingAverage((int) (0.1 / Robot.defaultPeriodSecs));
+  private static ShotCalculator instance;
 
-  private static Rotation2d turretAngle;
-  private static Rotation2d hoodAngle = Rotation2d.k180deg;
+  public static ShotCalculator getInstance() {
+    if (instance == null) {
+      instance = new ShotCalculator();
+    }
+    return instance;
+  }
+
+  public static final Transform2d robotToTurret = new Transform2d();
+
+  private Rotation2d turretAngle;
+  private Rotation2d hoodAngle = Rotation2d.kZero;
 
   public record ShotParameters(
       boolean isValid,
@@ -39,7 +44,7 @@ public class ShotCalculator {
       double flywheelSpeedRotPerSec) {}
 
   // Cache parameters
-  private static ShotParameters latestShot = null;
+  private ShotParameters latestShot = null;
 
   private static double minDistance;
   private static double maxDistance;
@@ -88,7 +93,7 @@ public class ShotCalculator {
     timeOfFlightMap.put(1.38, 0.90);
   }
 
-  public static ShotParameters calculateShot() {
+  public ShotParameters calculateShot() {
     if (latestShot != null) {
       return latestShot;
     }
@@ -158,7 +163,7 @@ public class ShotCalculator {
     return latestShot;
   }
 
-  public static void clearCache() {
+  public void clearCache() {
     latestShot = null;
   }
 }
