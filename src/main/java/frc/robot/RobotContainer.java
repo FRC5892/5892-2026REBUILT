@@ -38,9 +38,9 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOLimelight;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.util.LoggedTalon.NoOppTalonFX;
-import frc.robot.util.LoggedTalon.PhoenixTalonFX;
-import frc.robot.util.LoggedTalon.SimpleMotorSim;
+import frc.robot.util.LoggedTalon.TalonFX.NoOppTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.PhoenixTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.TalonFXSimpleMotorSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -106,8 +106,8 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         intake =
             new Intake(
-                new SimpleMotorSim(30, rioCAN, "IntakeRoller", 1, 1),
-                new SimpleMotorSim(31, rioCAN, "IntakeSlap", 1, 1));
+                new TalonFXSimpleMotorSim(30, rioCAN, "IntakeRoller", 1, 1),
+                new TalonFXSimpleMotorSim(31, rioCAN, "IntakeSlap", 1, 1));
         break;
 
       default:

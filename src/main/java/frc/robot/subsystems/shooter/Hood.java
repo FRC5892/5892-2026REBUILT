@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -24,7 +25,7 @@ import frc.robot.util.FieldConstants.LinesHorizontal;
 import frc.robot.util.FieldConstants.LinesVertical;
 import frc.robot.util.GenericPositionMechanismSubsystem;
 import frc.robot.util.LoggedDIO.LoggedDIO;
-import frc.robot.util.LoggedTalon.LoggedTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import frc.robot.util.LoggedTunableMeasure;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -78,7 +79,7 @@ public class Hood extends GenericPositionMechanismSubsystem {
                     .withInverted(InvertedValue.Clockwise_Positive))
             .withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(5))
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(15));
-    motor.withConfig(config).withMMPIDTuning(config);
+    motor.withConfig(config).withMMPIDTuning(SlotConfigs.from(config.Slot0), config.MotionMagic);
     setDefaultCommand(aimCommand());
     new Trigger(this::shouldStow).whileTrue(stowCommand());
   }

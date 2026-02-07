@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -30,7 +31,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.Mode;
 import frc.robot.RobotState;
 import frc.robot.util.LoggedDIO.LoggedDIO;
-import frc.robot.util.LoggedTalon.LoggedTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import frc.robot.util.LoggedTunableMeasure;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.MechanismUtil;
@@ -89,7 +90,7 @@ public class Turret extends SubsystemBase {
                     .withInverted(InvertedValue.Clockwise_Positive))
             .withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(5))
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(15));
-    motor.withConfig(config).withMMPIDTuning(config);
+    motor.withConfig(config).withMMPIDTuning(SlotConfigs.from(config.Slot0), config.MotionMagic);
     setDefaultCommand(aimCommand());
     if (Constants.currentMode == Mode.SIM) {
       SmartDashboard.putData("Turret/SetHomed", setHomed());

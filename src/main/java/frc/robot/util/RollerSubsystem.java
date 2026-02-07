@@ -3,7 +3,7 @@ package frc.robot.util;
 import com.ctre.phoenix6.controls.VoltageOut;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.LoggedTalon.LoggedTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import java.util.function.DoubleSupplier;
 import lombok.RequiredArgsConstructor;
 
