@@ -14,7 +14,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.LoggedTalon.LoggedTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import frc.robot.util.LoggedTunableMeasure;
 import frc.robot.util.LoggedTunableNumber;
 
@@ -33,11 +33,7 @@ public class Intake extends SubsystemBase {
   private final VoltageOut voltageOut = new VoltageOut(tunedVoltage.get()).withEnableFOC(true);
   private final MotionMagicTorqueCurrentFOC mmOut = new MotionMagicTorqueCurrentFOC(0);
 
-  /**
-   * Creates a new Intake.
-   *
-   * @param phoenixTalonFX
-   */
+  /** Creates a new Intake. */
   public Intake(LoggedTalonFX rollerMotor, LoggedTalonFX slapDownMotor) {
     this.rollerMotor = rollerMotor.withConfig(LoggedTalonFX.buildStandardConfig(20, 20));
     var slapDownConfig =
