@@ -34,26 +34,11 @@ public class Hood extends GenericPositionMechanismSubsystem {
   private final LoggedTunableMeasure<MutAngle> stowPosition =
       new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(15));
 
-  @AutoLogOutput(key = "Hood/trenchAreas")
-  public static final Rectangle2d[]
-      trenchAreas = { // For bonus points allow the trench area to be expanded by hardcoded constant
-    new Rectangle2d(
-        new Translation2d(LinesVertical.starting, LinesHorizontal.leftTrenchOpenStart),
-        new Translation2d(LinesVertical.neutralZoneNear, LinesHorizontal.leftTrenchOpenEnd)),
-    new Rectangle2d(
-        new Translation2d(
-            (2 * LinesVertical.center) - LinesVertical.starting,
-            LinesHorizontal.leftTrenchOpenStart),
-        new Translation2d(LinesVertical.neutralZoneFar, LinesHorizontal.leftTrenchOpenEnd)),
-    new Rectangle2d(
-        new Translation2d(LinesVertical.starting, LinesHorizontal.rightTrenchOpenStart),
-        new Translation2d(LinesVertical.neutralZoneNear, LinesHorizontal.rightTrenchOpenEnd)),
-    new Rectangle2d(
-        new Translation2d(
-            (2 * LinesVertical.center) - LinesVertical.starting,
-            LinesHorizontal.rightTrenchOpenStart),
-        new Translation2d(LinesVertical.neutralZoneFar, LinesHorizontal.rightTrenchOpenEnd))
-  };
+  public static LoggedTunableNumber stowTrenchGapOffset =
+      new LoggedTunableNumber("Hood/stowTrenchGapOffset", 0, "m");
+
+  @AutoLogOutput(key = "Hood/TrenchAreas")
+  public static Rectangle2d[] trenchAreas = new Rectangle2d[4];
 
   public Hood(LoggedTalonFX motor, LoggedDIO reverseLimit, LoggedDIO forwardLimit) {
     super(
@@ -66,6 +51,7 @@ public class Hood extends GenericPositionMechanismSubsystem {
         new LoggedTunableMeasure<>("Hood/Homing/homePosition", Rotations.mutable(0))::get,
         new LoggedTunableMeasure<>("Hood/Homing/homePosition", Rotations.mutable(0.1))::get,
         new LoggedTunableMeasure<>("Hood/Tolerance", Degrees.mutable(5))::get);
+    updateTrenchAreas();
     var config =
         new TalonFXConfiguration()
             .withSlot0(new Slot0Configs().withKP(0).withKI(0).withKD(0).withKS(0).withKV(0))
@@ -116,5 +102,35 @@ public class Hood extends GenericPositionMechanismSubsystem {
   @Override
   protected void periodicUser() {
     ShotCalculator.getInstance().clearCache();
+    LoggedTunableNumber.ifChanged(this, (value) -> this.updateTrenchAreas(), stowTrenchGapOffset);
+  }
+
+  private void updateTrenchAreas() {
+    double offset = stowTrenchGapOffset.get();
+    trenchAreas =
+        new Rectangle2d[] {
+          new Rectangle2d(
+              new Translation2d(
+                  LinesVertical.starting - offset, LinesHorizontal.leftTrenchOpenStart),
+              new Translation2d(
+                  LinesVertical.neutralZoneNear + offset, LinesHorizontal.leftTrenchOpenEnd)),
+          new Rectangle2d(
+              new Translation2d(
+                  (2 * LinesVertical.center) - LinesVertical.starting - offset,
+                  LinesHorizontal.leftTrenchOpenStart),
+              new Translation2d(
+                  LinesVertical.neutralZoneFar + offset, LinesHorizontal.leftTrenchOpenEnd)),
+          new Rectangle2d(
+              new Translation2d(
+                  LinesVertical.starting - offset, LinesHorizontal.rightTrenchOpenStart),
+              new Translation2d(
+                  LinesVertical.neutralZoneNear + offset, LinesHorizontal.rightTrenchOpenEnd)),
+          new Rectangle2d(
+              new Translation2d(
+                  (2 * LinesVertical.center) - LinesVertical.starting - offset,
+                  LinesHorizontal.rightTrenchOpenStart),
+              new Translation2d(
+                  LinesVertical.neutralZoneFar + offset, LinesHorizontal.rightTrenchOpenEnd))
+        };
   }
 }
