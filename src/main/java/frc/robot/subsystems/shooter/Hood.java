@@ -101,7 +101,7 @@ public class Hood extends GenericPositionMechanismSubsystem {
 
   @Override
   protected void periodicUser() {
-    ShotCalculator.getInstance().getclearCache();
+    ShotCalculator.getInstance().clearCache();
     LoggedTunableNumber.ifChanged(this, (value) -> this.updateTrenchAreas(), stowTrenchGapOffset);
   }
 
