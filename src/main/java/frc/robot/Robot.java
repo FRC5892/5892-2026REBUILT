@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.FollowPathCommand;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.PhoenixUtil;
@@ -71,6 +72,8 @@ public class Robot extends LoggedRobot {
 
     // Disable signal logging
     SignalLogger.enableAutoLogging(false);
+
+    DriverStation.silenceJoystickConnectionWarning(true);
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.

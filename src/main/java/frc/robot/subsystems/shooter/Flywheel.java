@@ -8,7 +8,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.LoggedTalon.LoggedTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import frc.robot.util.LoggedTunableMeasure;
 import lombok.Getter;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -36,7 +36,8 @@ public class Flywheel extends SubsystemBase {
     return run(
         () -> {
           setSetpoint(
-              RotationsPerSecond.of(ShotCalculator.calculateShot().flywheelSpeedRotPerSec()));
+              RotationsPerSecond.of(
+                  ShotCalculator.getInstance().calculateShot().flywheelSpeedRotPerSec()));
         });
   }
 
@@ -44,6 +45,6 @@ public class Flywheel extends SubsystemBase {
   public void periodic() {
     motor.periodic();
     atSetpoint = motor.atSetpoint(mmControl.getVelocityMeasure(), tolerance.get());
-    ShotCalculator.clearCache();
+    ShotCalculator.getInstance().clearCache();
   }
 }

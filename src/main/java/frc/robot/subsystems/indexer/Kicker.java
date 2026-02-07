@@ -1,6 +1,6 @@
 package frc.robot.subsystems.indexer;
 
-import frc.robot.util.LoggedTalon.LoggedTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.RollerSubsystem;
 

@@ -6,10 +6,10 @@ import frc.robot.Constants;
 import frc.robot.util.LoggedDIO.HardwareDIO;
 import frc.robot.util.LoggedDIO.SimDIO;
 import frc.robot.util.LoggedTalon.Follower.PhoenixTalonFollower;
-import frc.robot.util.LoggedTalon.NoOppTalonFX;
-import frc.robot.util.LoggedTalon.PhoenixTalonFX;
-import frc.robot.util.LoggedTalon.SimpleMotorSim;
-import frc.robot.util.LoggedTalon.TalonFlywheelSim;
+import frc.robot.util.LoggedTalon.TalonFX.NoOppTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.PhoenixTalonFX;
+import frc.robot.util.LoggedTalon.TalonFX.TalonFXFlywheelSim;
+import frc.robot.util.LoggedTalon.TalonFX.TalonFXSimpleMotorSim;
 import lombok.Getter;
 
 /** Container for shooting bits. This class will initialize the propper IO interfaces. */
@@ -42,7 +42,7 @@ public class Shooter {
       case SIM -> {
         flywheel =
             new Flywheel(
-                new TalonFlywheelSim(
+                new TalonFXFlywheelSim(
                     25,
                     bus,
                     "Flywheel",
@@ -51,12 +51,12 @@ public class Shooter {
                     new PhoenixTalonFollower(26, MotorAlignmentValue.Aligned)));
         hood =
             new Hood(
-                new SimpleMotorSim(27, bus, "Hood", 0.0017154536, 1.3),
+                new TalonFXSimpleMotorSim(27, bus, "Hood", 0.0017154536, 1.3),
                 SimDIO.fromNT("HoodReverse"),
                 SimDIO.fromNT("HoodForward"));
         turret =
             new Turret(
-                new SimpleMotorSim(28, bus, "Turret", 0.0307668163, 1.25),
+                new TalonFXSimpleMotorSim(28, bus, "Turret", 0.0307668163, 1.25),
                 SimDIO.fromNT("TurretReverse"),
                 SimDIO.fromNT("TurretForward"));
       }

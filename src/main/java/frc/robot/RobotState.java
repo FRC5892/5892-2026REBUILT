@@ -20,6 +20,6 @@ public class RobotState {
     return instance;
   }
 
-  @Getter @Setter private ChassisSpeeds robotRelativeVelocity;
-  @Getter @Setter private Pose2d robotPosition;
+  @Getter @Setter private ChassisSpeeds robotRelativeVelocity = new ChassisSpeeds();
+  @Getter @Setter private Pose2d robotPosition = new Pose2d();
 }

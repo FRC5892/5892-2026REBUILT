@@ -16,22 +16,39 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotState;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
+import frc.robot.util.FieldConstants.LinesHorizontal;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.Logger;
 
 /** Thank you so much 6328! */
 public class ShotCalculator {
-  private static final Transform2d robotToTurret = new Transform2d();
+  private static ShotCalculator instance;
 
-  //   private static final LinearFilter turretAngleFilter =
-  //       LinearFilter.movingAverage((int) (0.1 / Robot.defaultPeriodSecs));
-  //   private static final LinearFilter hoodAngleFilter =
-  //       LinearFilter.movingAverage((int) (0.1 / Robot.defaultPeriodSecs));
+  public static ShotCalculator getInstance() {
+    if (instance == null) {
+      instance = new ShotCalculator();
+    }
+    return instance;
+  }
 
-  private static Rotation2d turretAngle;
-  private static Rotation2d hoodAngle = Rotation2d.k180deg;
+  public static final Transform2d robotToTurret = new Transform2d();
+
+  private static final Translation2d rightTarget =
+      AllianceFlipUtil.apply(new Translation2d(1.5, 1.5));
+
+  private static final Translation2d leftTarget =
+      rightTarget.plus(new Translation2d(0, (LinesHorizontal.center - rightTarget.getX()) * 2));
+
+  private Rotation2d turretAngle;
+  private Rotation2d hoodAngle = Rotation2d.kZero;
 
   public record ShotParameters(
       boolean isValid,
@@ -40,11 +57,12 @@ public class ShotCalculator {
       double flywheelSpeedRotPerSec) {}
 
   // Cache parameters
-  private static ShotParameters latestShot = null;
+  private ShotParameters latestShot = null;
+  @AutoLogOutput @Setter private Goal goal = Goal.HUB;
 
-  private static double minDistance;
-  private static double maxDistance;
-  private static double phaseDelay;
+  private static final double minDistance;
+  private static final double maxDistance;
+  private static final double phaseDelay;
   private static final InterpolatingTreeMap<Double, Rotation2d> shotHoodAngleMap =
       new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
   private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap =
@@ -87,9 +105,11 @@ public class ShotCalculator {
     timeOfFlightMap.put(3.15, 1.11);
     timeOfFlightMap.put(1.88, 1.09);
     timeOfFlightMap.put(1.38, 0.90);
+
+    AutoLogOutputManager.addObject(getInstance());
   }
 
-  public static ShotParameters calculateShot() {
+  public ShotParameters calculateShot() {
     if (latestShot != null) {
       return latestShot;
     }
@@ -98,7 +118,7 @@ public class ShotCalculator {
     Pose2d estimatedPose = RobotState.getInstance().getRobotPosition();
     ChassisSpeeds robotRelativeVelocity = RobotState.getInstance().getRobotRelativeVelocity();
     ChassisSpeeds robotVelocity =
-        ChassisSpeeds.fromFieldRelativeSpeeds(robotRelativeVelocity, estimatedPose.getRotation());
+        ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeVelocity, estimatedPose.getRotation());
     estimatedPose =
         estimatedPose.exp(
             new Twist2d(
@@ -107,7 +127,8 @@ public class ShotCalculator {
                 robotRelativeVelocity.omegaRadiansPerSecond * phaseDelay));
 
     // Calculate distance from turret to target
-    Translation2d target = AllianceFlipUtil.apply(FieldConstants.hubCenter);
+    Translation2d target = AllianceFlipUtil.apply(goal.pose);
+    Logger.recordOutput("ShotCalculator/Target", new Pose2d(target, Rotation2d.kZero));
     Pose2d turretPosition = estimatedPose.transformBy(robotToTurret);
     double turretToTargetDistance = target.getDistance(turretPosition.getTranslation());
 
@@ -140,7 +161,8 @@ public class ShotCalculator {
     }
 
     // Calculate parameters accounted for imparted velocity
-    turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
+    turretAngle =
+        target.minus(lookaheadPose.getTranslation()).getAngle().minus(lookaheadPose.getRotation());
     hoodAngle = shotHoodAngleMap.get(lookaheadTurretToTargetDistance);
     latestShot =
         new ShotParameters(
@@ -151,13 +173,27 @@ public class ShotCalculator {
             shotFlywheelSpeedMap.get(lookaheadTurretToTargetDistance));
 
     // Log calculated values
+    Logger.recordOutput("ShotCalculator/LatestShot", latestShot);
     Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
     Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
 
     return latestShot;
   }
 
-  public static void clearCache() {
+  public void clearCache() {
     latestShot = null;
+  }
+
+  @RequiredArgsConstructor
+  public enum Goal {
+    HUB(FieldConstants.hubCenter),
+    LEFT(leftTarget),
+    RIGHT(rightTarget);
+    public final Translation2d pose;
+  }
+
+  // This should maybe be refactored. It takes an extra loop cycle to actually change the setpoint.
+  public Command setGoalCommand(Goal goal) {
+    return Commands.runOnce(() -> this.goal = goal);
   }
 }
