@@ -42,6 +42,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 public class Turret extends SubsystemBase {
 
@@ -76,8 +77,9 @@ public class Turret extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngle> offset =
       new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(48.4));
 
+  private final LoggedTunableMeasure<MutAngle> staticPose =
+      new LoggedTunableMeasure<MutAngle>("Turret/StaticPose", Degrees.mutable(0));
   /* Control Requests */
-  // TODO: When retuning, use torque control instead
   private final MotionMagicDutyCycle mmControl = new MotionMagicDutyCycle(0);
   private final NeutralOut neutralControl = new NeutralOut();
 
@@ -87,6 +89,16 @@ public class Turret extends SubsystemBase {
   private boolean positionControl = false;
   @Setter private boolean homed = false;
   @Getter private boolean atSetpoint = false;
+
+  private final LoggedNetworkBoolean estopFlag =
+      new LoggedNetworkBoolean("SmartDashboard/TurretEStop", false);
+  private final LoggedNetworkBoolean holdFlag =
+      new LoggedNetworkBoolean("SmartDashboard/TurretHold", false);
+
+  private final LoggedNetworkBoolean staticFlag =
+      new LoggedNetworkBoolean("SmartDashboard/TurretStatic", false);
+
+  private Angle holdOffset = null;
 
   private final Translation3d turretVisual = new Translation3d(0, 0, Units.inchesToMeters(20));
 
@@ -118,7 +130,8 @@ public class Turret extends SubsystemBase {
     motor.withConfig(config).withMMPIDTuning(SlotConfigs.from(config.Slot0), config.MotionMagic);
     // setDefaultCommand(aimCommand());
     if (Constants.tuningMode) {
-      // This command directly sets the turret position to 0. It really should never be used ever
+      // This command directly sets the turret position to 0. It really should never
+      // be used ever
       // ever
       SmartDashboard.putData("Turret/ForceZero", forceZero());
     }
@@ -133,13 +146,25 @@ public class Turret extends SubsystemBase {
   public Command aimCommand() {
     return run(
         () -> {
-          if (homed) {
-            this.requestPosition(
-                Radians.of(
-                    MathUtil.angleModulus(
-                        ShotCalculator.getInstance().calculateShot().turretAngle().getRadians()
-                            + offset.get().baseUnitMagnitude())));
+          if (!homed) return;
+          if (estopFlag.get()) {
+            positionControl = false;
+            motor.setControl(neutralControl);
+            return;
           }
+          if (holdFlag.get()) {
+            if (holdOffset == null) {
+              holdOffset = motor.getPosition();
+            }
+            requestPosition(staticPose.get().copy().plus(holdOffset));
+            return;
+          }
+          holdOffset = null;
+          this.requestPosition(
+              Radians.of(
+                  MathUtil.angleModulus(
+                      ShotCalculator.getInstance().calculateShot().turretAngle().getRadians()
+                          + offset.get().baseUnitMagnitude())));
         });
   }
 
@@ -204,7 +229,8 @@ public class Turret extends SubsystemBase {
    * @return the command
    */
   public Command gotoPosition(Supplier<Angle> position) {
-    // I really shouldn't but by creating a functional command I don't create 5 extra objects by
+    // I really shouldn't but by creating a functional command I don't create 5
+    // extra objects by
     // separating this out.
     return new FunctionalCommand(
         () -> requestPosition(position.get()),

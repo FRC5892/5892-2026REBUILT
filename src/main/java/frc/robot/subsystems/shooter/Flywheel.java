@@ -1,6 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
@@ -18,6 +17,7 @@ import frc.robot.util.LoggedTunableMeasure;
 import java.util.function.DoubleSupplier;
 import lombok.Getter;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 public class Flywheel extends SubsystemBase {
 
@@ -26,7 +26,14 @@ public class Flywheel extends SubsystemBase {
   private final VelocityTorqueCurrentFOC control = new VelocityTorqueCurrentFOC(0);
   @Getter @AutoLogOutput private boolean atSetpoint = false;
   private final LoggedTunableMeasure<MutAngularVelocity> tolerance =
-      new LoggedTunableMeasure<>("Flywheel/Tolerance", RPM.mutable(5));
+      new LoggedTunableMeasure<>("Flywheel/Tolerance", RotationsPerSecond.mutable(5));
+  private final LoggedTunableMeasure<MutAngularVelocity> staticSpeed =
+      new LoggedTunableMeasure<>("Flywheel/staticSpeed", RotationsPerSecond.mutable(66));
+
+  private final LoggedNetworkBoolean estopFlag =
+      new LoggedNetworkBoolean("SmartDashboard/FlywheelEStop", false);
+  private final LoggedNetworkBoolean staticFlag =
+      new LoggedNetworkBoolean("SmartDashboard/FlywheelStatic", false);
 
   public Flywheel(LoggedTalonFX motor) {
     this.motor = motor;
@@ -64,6 +71,14 @@ public class Flywheel extends SubsystemBase {
   public Command aimCommand() {
     return run(
         () -> {
+          if (estopFlag.get()) {
+            motor.setControl(control.withVelocity(0));
+            return;
+          }
+          if (staticFlag.get()) {
+            motor.setControl(control.withVelocity(staticSpeed.get()));
+            return;
+          }
           setSetpoint(
               RotationsPerSecond.of(
                   ShotCalculator.getInstance().calculateShot().flywheelSpeedRotPerSec()));

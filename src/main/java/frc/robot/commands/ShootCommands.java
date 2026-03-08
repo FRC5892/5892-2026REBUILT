@@ -13,16 +13,18 @@ import lombok.NoArgsConstructor;
 public class ShootCommands {
   public static Command shoot(Indexer indexer, Shooter shooter, Goal goal) {
     return Commands.race(
-            indexer.outtake(), shooter.getFlywheel().aimCommand(), shooter.getHood().aimCommand()
-            // shooter.getTurret().aimCommand()
-            )
+            indexer.outtake(),
+            shooter.getFlywheel().aimCommand(),
+            shooter.getHood().aimCommand(),
+            shooter.getTurret().aimCommand())
         .beforeStarting(() -> RobotState.getInstance().setGoal(goal));
   }
 
   public static Command shoot(Indexer indexer, Shooter shooter) {
     return Commands.race(
-        indexer.outtake(), shooter.getFlywheel().aimCommand(), shooter.getHood().aimCommand()
-        // shooter.getTurret().aimCommand()
-        );
+        indexer.outtake(),
+        shooter.getFlywheel().aimCommand(),
+        shooter.getHood().aimCommand(),
+        shooter.getTurret().aimCommand());
   }
 }

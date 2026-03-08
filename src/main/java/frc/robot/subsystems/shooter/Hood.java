@@ -38,6 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 public class Hood extends SubsystemBase {
   /* Hardware */
@@ -47,16 +48,23 @@ public class Hood extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngle> downPosition =
       new LoggedTunableMeasure<>("Hood/DownPosition", Degrees.mutable(18.575));
   private final LoggedTunableMeasure<MutAngle> stowPosition =
-      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(15));
+      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(19));
   public static LoggedTunableNumber stowTrenchGapOffset =
       new LoggedTunableNumber("Hood/stowTrenchGapOffset", 0, "m");
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Hood/Tolerance", Degrees.mutable(2));
+  private final LoggedTunableMeasure<MutAngle> staticPosition =
+      new LoggedTunableMeasure<>("Hood/StaticPosition", Degrees.mutable(18.575));
   /* Homing */
   private final LoggedTunableNumber homingDutyCycle =
       new LoggedTunableNumber("Hood/Homing/DutyCycle", -0.1, "%");
   private final LoggedTunableNumber homingCurrentThreshold =
       new LoggedTunableNumber("Hood/Homing/CurrentThreshold", 10, "A");
+
+  private final LoggedNetworkBoolean estopFlag =
+      new LoggedNetworkBoolean("SmartDashboard/HoodEStop", false);
+  private final LoggedNetworkBoolean staticFlag =
+      new LoggedNetworkBoolean("SmartDashboard/HoodStatic", false);
 
   /* State */
   /** The target position of the motor. 0 is the hood resting on the turret. */
@@ -104,9 +112,17 @@ public class Hood extends SubsystemBase {
   public Command aimCommand() {
     return run(
         () -> {
-          if (homed) {
-            this.requestAngle(ShotCalculator.getInstance().calculateShot().hoodAngle());
+          if (!homed) return;
+
+          if (estopFlag.get()) {
+            motor.setControl(neutralControl);
+            return;
           }
+          if (staticFlag.get()) {
+            this.requestAngle(new Rotation2d(staticPosition.get()));
+            return;
+          }
+          this.requestAngle(ShotCalculator.getInstance().calculateShot().hoodAngle());
         });
   }
 
