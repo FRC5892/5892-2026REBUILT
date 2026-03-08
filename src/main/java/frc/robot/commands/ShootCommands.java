@@ -15,8 +15,9 @@ public class ShootCommands {
     return Commands.race(
             indexer.outtake(),
             shooter.getFlywheel().aimCommand(),
-            shooter.getHood().aimCommand(),
-            shooter.getTurret().aimCommand())
+            shooter.getHood().aimCommand()
+            //shooter.getTurret().aimCommand()
+            )
         .beforeStarting(() -> RobotState.getInstance().setGoal(goal));
   }
 
