@@ -24,7 +24,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -113,11 +112,11 @@ public class Hood extends SubsystemBase {
 
   public Command stowCommand() {
     return startEnd(
-            () -> {
-              this.requestAngle(new Rotation2d(stowPosition.get()));
-            },
-            () -> {});
-        // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        () -> {
+          this.requestAngle(new Rotation2d(stowPosition.get()));
+        },
+        () -> {});
+    // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
   }
 
   // TODO: Create a real homing sequence w/ sensorless homing

@@ -15,6 +15,7 @@ import static frc.robot.subsystems.vision.VisionConstants.cameraRightName;
 import com.ctre.phoenix6.CANBus;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -209,12 +210,15 @@ public class RobotContainer {
     driveController
         .leftBumper()
         .or(coDriveController.leftBumper())
-        .toggleOnTrue(intake.intakeSequence());
-    driveController.povUp().or(coDriveController.povUp()).toggleOnTrue(intake.hold());
+        .onTrue(intake.intakeSequence());
+    driveController.povUp().or(coDriveController.povUp()).onTrue(intake.hold());
+    driveController.povLeft().or(coDriveController.povUp()).onTrue(intake.retractForeverCommand());
 
-    driveController.povDown().or(coDriveController.povDown()).whileTrue(
-        shooter.getHood().stowCommand()
-    );
+
+    driveController
+        .povDown()
+        .or(coDriveController.povDown())
+        .whileTrue(shooter.getHood().stowCommand());
 
     driveController
         .start()
@@ -236,7 +240,7 @@ public class RobotContainer {
     driveController
         .a()
         .or(coDriveController.a())
-        .onTrue(RobotState.getInstance().setGoalCommand(Goal.CENTER));
+        .onTrue(shooter.getTurret().forceZero().andThen(shooter.getTurret().gotoPosition(()->Degree.of(0))).alongWith(Commands.run(()->{})));
     driveController
         .y()
         .or(coDriveController.y())
@@ -249,9 +253,9 @@ public class RobotContainer {
                 drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
 
     if (testController != null) {
-      testController.x().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(-120)));
-      testController.a().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(0)));
-      testController.b().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(120)));
+      testController.x().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(-120)).alongWith(Commands.run(()->{})));
+      testController.a().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(0)).alongWith(Commands.run(()->{})));
+      testController.b().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(120)).alongWith(Commands.run(()->{})));
       testController
           .leftBumper()
           .onTrue(shooter.getHood().gotoAngle(() -> Rotation2d.fromDegrees(19)));
