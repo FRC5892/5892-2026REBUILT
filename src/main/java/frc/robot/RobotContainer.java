@@ -13,7 +13,6 @@ import static frc.robot.subsystems.vision.VisionConstants.cameraLeftName;
 import static frc.robot.subsystems.vision.VisionConstants.cameraRightName;
 
 import com.ctre.phoenix6.CANBus;
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -211,9 +210,11 @@ public class RobotContainer {
         .leftBumper()
         .or(coDriveController.leftBumper())
         .toggleOnTrue(intake.intakeSequence());
-    driveController.povUp().or(
-        coDriveController.povUp()
-    ).toggleOnTrue(intake.hold());
+    driveController.povUp().or(coDriveController.povUp()).toggleOnTrue(intake.hold());
+
+    driveController.povDown().or(coDriveController.povDown()).whileTrue(
+        shooter.getHood().stowCommand()
+    );
 
     driveController
         .start()

@@ -87,8 +87,7 @@ public class ShotCalculator {
     shotFlywheelSpeedMap.put(Units.feetToMeters(4 + 2), 60.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(6 + 2), 66.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(6 + (11 / 12) + 2), 68.0);
-    shotFlywheelSpeedMap.put(
-        Units.inchesToMeters(197.94), 82.0); // 147.5 x, 132 y =
+    shotFlywheelSpeedMap.put(Units.inchesToMeters(197.94), 82.0); // 147.5 x, 132 y =
 
     // TODO: Untuned M vs S
     timeOfFlightMap.put(5.68, 1.16);

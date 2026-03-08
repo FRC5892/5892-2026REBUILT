@@ -116,8 +116,8 @@ public class Hood extends SubsystemBase {
             () -> {
               this.requestAngle(new Rotation2d(stowPosition.get()));
             },
-            () -> {})
-        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+            () -> {});
+        // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
   }
 
   // TODO: Create a real homing sequence w/ sensorless homing
