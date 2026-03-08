@@ -79,8 +79,8 @@ public class ShotCalculator {
     shotHoodAngleMap.put(Units.feetToMeters(4 + 2), Rotation2d.fromDegrees(28.0));
     shotHoodAngleMap.put(Units.feetToMeters(6 + 2), Rotation2d.fromDegrees(32.0));
     shotHoodAngleMap.put(Units.feetToMeters(6 + (11 / 12) + 2), Rotation2d.fromDegrees(29.0));
-    shotHoodAngleMap.put(
-        Units.feetToMeters(197.94), Rotation2d.fromDegrees(42.0)); // 147.5 x, 132 y =
+    // shotHoodAngleMap.put(
+        // Units.feetToMeters(197.94), Rotation2d.fromDegrees(42.0)); // 147.5 x, 132 y =
     // shotHoodAngleMap.put(Units.feetToMeters(13 + 2), Rotation2d.fromDegrees(44.0));
 
     // M vs RPS
