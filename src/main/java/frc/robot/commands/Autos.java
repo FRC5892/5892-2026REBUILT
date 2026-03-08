@@ -37,9 +37,16 @@ public class Autos {
       }
       // Boilerplate is over. Now do the actual logic
       final Command auto =
-          AutoBuilder.followPath(loadPath("Left_Path_Start", points))
-              .raceWith(intake.intakeSequence(), ShootCommands.shoot(indexer, shooter, Goal.LEFT))
-              .andThen();
+      Commands.sequence(
+          Commands.race(
+            Commands.sequence(AutoBuilder.followPath(loadPath("Left_Path_Start", points)),AutoBuilder.followPath(loadPath("Left_Path_Return", points))),intake.intakeSequence()
+          ),
+          Commands.race(ShootCommands.shoot(indexer, shooter,Goal.HUB),Commands.waitSeconds(7)),
+          Commands.race(
+            Commands.sequence(AutoBuilder.followPath(loadPath("Left_Path", points)),AutoBuilder.followPath(loadPath("Left_Path_Return", points))),intake.intakeSequence()
+          ),
+          Commands.race(ShootCommands.shoot(indexer, shooter,Goal.HUB),Commands.waitSeconds(7))
+          );
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
@@ -49,6 +56,41 @@ public class Autos {
     } catch (Exception e) {
       @SuppressWarnings("resource")
       Alert alert = new Alert("Failed to load leftCenter Auto", AlertType.kError);
+      alert.set(true);
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+      return Commands.none();
+    }
+  }
+
+    public static Command rightAuto(Intake intake, Indexer indexer, Shooter shooter) {
+    try {
+      final ArrayList<PathPoint> points;
+      if (Constants.currentMode == Constants.Mode.SIM) {
+        points = new ArrayList<>();
+      } else {
+        points = null;
+      }
+      // Boilerplate is over. Now do the actual logic
+      final Command auto =
+      Commands.sequence(
+          Commands.race(
+            Commands.sequence(AutoBuilder.followPath(loadPath("Right_Path_Start", points)),AutoBuilder.followPath(loadPath("Right_Path_Return", points))),intake.intakeSequence()
+          ),
+          Commands.race(ShootCommands.shoot(indexer, shooter,Goal.HUB),Commands.waitSeconds(7)),
+          Commands.race(
+            Commands.sequence(AutoBuilder.followPath(loadPath("Right_Path", points)),AutoBuilder.followPath(loadPath("Right_Path_Return", points))),intake.intakeSequence()
+          ),
+          Commands.race(ShootCommands.shoot(indexer, shooter,Goal.HUB),Commands.waitSeconds(7))
+          );
+      // More boilerplate
+      if (Constants.currentMode == Constants.Mode.SIM) {
+        Logger.recordOutput(
+            "Autos/RightAuto", points.stream().map(m -> m.position).toArray(Translation2d[]::new));
+      }
+      return auto;
+    } catch (Exception e) {
+      @SuppressWarnings("resource")
+      Alert alert = new Alert("Failed to load Right Auto", AlertType.kError);
       alert.set(true);
       DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
       return Commands.none();

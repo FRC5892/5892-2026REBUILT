@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotState;
 import frc.robot.util.FieldConstants.LinesHorizontal;
 import frc.robot.util.FieldConstants.LinesVertical;
@@ -96,7 +97,7 @@ public class Hood extends SubsystemBase {
 
     // TODO: Uncomment before flight
     setDefaultCommand(aimCommand());
-    // new Trigger(this::shouldStow).whileTrue(stowCommand());
+    new Trigger(this::shouldStow).whileTrue(stowCommand());
 
     SmartDashboard.putData("Hood/SetHomed", runOnce(() -> setHomed(true)).ignoringDisable(true));
   }

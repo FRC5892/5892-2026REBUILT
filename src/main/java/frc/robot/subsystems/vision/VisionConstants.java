@@ -7,8 +7,6 @@
 
 package frc.robot.subsystems.vision;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -16,6 +14,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 import frc.robot.Constants.Mode;
+import org.littletonrobotics.junction.Logger;
 
 public class VisionConstants {
   // AprilTag layout
@@ -49,14 +48,13 @@ public class VisionConstants {
           Units.inchesToMeters(6 + (7 / 16) + 1 + (5 / 8)),
           new Rotation3d(0.0, Units.degreesToRadians(-3.9), Units.degreesToRadians(-90)));
 
-    static {
-        if (Constants.currentMode == Mode.SIM) {
-            Logger.recordOutput("Vision/Cameras/"+cameraBackName, robotToCameraBack);
-            Logger.recordOutput("Vision/Cameras/"+cameraLeftName, robotToCameraLeft);
-            Logger.recordOutput("Vision/Cameras/"+cameraRightName, robotToCameraRight);
-
-        }
+  static {
+    if (Constants.currentMode == Mode.SIM) {
+      Logger.recordOutput("Vision/Cameras/" + cameraBackName, robotToCameraBack);
+      Logger.recordOutput("Vision/Cameras/" + cameraLeftName, robotToCameraLeft);
+      Logger.recordOutput("Vision/Cameras/" + cameraRightName, robotToCameraRight);
     }
+  }
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.3;

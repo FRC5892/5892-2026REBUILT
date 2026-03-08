@@ -21,6 +21,12 @@
           "data": {
             "pathName": "Left_Path"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left_Path_Return"
+          }
         }
       ]
     }

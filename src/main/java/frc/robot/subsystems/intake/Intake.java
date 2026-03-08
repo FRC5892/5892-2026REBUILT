@@ -21,7 +21,7 @@ import frc.robot.util.LoggedTunableNumber;
 public class Intake extends SubsystemBase {
   private final LoggedTalonFX rollerMotor;
   private final LoggedTalonFX slapDownMotor;
-  private final LoggedTunableNumber rollerSpeed = new LoggedTunableNumber("Intake/RollerSpeed", 1);
+  private final LoggedTunableNumber rollerSpeed = new LoggedTunableNumber("Intake/RollerSpeed", 0.5);
   private final LoggedTunableMeasure<MutAngle> outPosition =
       new LoggedTunableMeasure<>("Intake/OutPosition", Rotation.mutable(-0.6521));
   private final LoggedTunableNumber extendOuttakeSpeed =
@@ -38,12 +38,12 @@ public class Intake extends SubsystemBase {
   public Intake(LoggedTalonFX rollerMotor, LoggedTalonFX slapDownMotor) {
     this.rollerMotor = rollerMotor.withConfig(LoggedTalonFX.buildStandardConfig(160, 40));
     var slapDownConfig =
-        LoggedTalonFX.buildStandardConfig(40, 20)
-            .withSlot0(new Slot0Configs().withKP(0).withKI(0).withKD(0).withKS(0).withKV(0))
+        LoggedTalonFX.buildStandardConfig(80, 4020)
+            .withSlot0(new Slot0Configs().withKP(10).withKI(0).withKD(0).withKS(0).withKV(0))
             .withMotionMagic(
                 new MotionMagicConfigs()
-                    .withMotionMagicAcceleration(2)
-                    .withMotionMagicCruiseVelocity(5))
+                    .withMotionMagicAcceleration(5)
+                    .withMotionMagicCruiseVelocity(8))
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(34.5));
     this.slapDownMotor = slapDownMotor.withConfig(slapDownConfig).withMMPIDTuning(slapDownConfig);
 
