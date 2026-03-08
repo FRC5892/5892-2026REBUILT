@@ -207,8 +207,8 @@ public class RobotContainer {
         .or(coDriveController.rightBumper())
         .whileTrue(ShootCommands.shoot(indexer, shooter));
     driveController.leftBumper().or(coDriveController.leftBumper()).onTrue(intake.intakeSequence());
-    // driveController.povUp().or(coDriveController.povUp()).onTrue(intake.hold());
-    // driveController.povLeft().or(coDriveController.povUp()).onTrue(intake.retractForeverCommand());
+    driveController.povUp().or(coDriveController.povUp()).onTrue(intake.hold());
+    driveController.povLeft().or(coDriveController.povUp()).onTrue(intake.retractForeverCommand());
 
     driveController
         .povDown()
