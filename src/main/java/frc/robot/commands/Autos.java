@@ -106,6 +106,9 @@ public class Autos {
       return Commands.none();
     }
   }
+  public static Command preload(Indexer indexer,Shooter shooter) {
+    return ShootCommands.shoot(indexer, shooter).withTimeout(7);
+  }
 
   public static PathPlannerPath loadPath(String name, List<PathPoint> points)
       throws IOException, ParseException {
