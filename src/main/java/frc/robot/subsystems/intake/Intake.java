@@ -21,7 +21,8 @@ import frc.robot.util.LoggedTunableNumber;
 public class Intake extends SubsystemBase {
   private final LoggedTalonFX rollerMotor;
   private final LoggedTalonFX slapDownMotor;
-  private final LoggedTunableNumber rollerSpeed = new LoggedTunableNumber("Intake/RollerSpeed", 0.5);
+  private final LoggedTunableNumber rollerSpeed =
+      new LoggedTunableNumber("Intake/RollerSpeed", 0.5);
   private final LoggedTunableMeasure<MutAngle> outPosition =
       new LoggedTunableMeasure<>("Intake/OutPosition", Rotation.mutable(-0.6521));
   private final LoggedTunableNumber extendOuttakeSpeed =
@@ -29,8 +30,7 @@ public class Intake extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngle> inPosition =
       new LoggedTunableMeasure<>("Intake/InPosition", Rotation.mutable(0));
   private final LoggedTunableMeasure<MutAngle> tolerance =
-      new LoggedTunableMeasure<>("Intake/Tolerance", Rotation.mutable(
-        0.05));
+      new LoggedTunableMeasure<>("Intake/Tolerance", Rotation.mutable(0.05));
 
   private final DutyCycleOut dutyCycleOut = new DutyCycleOut(rollerSpeed.get()).withEnableFOC(true);
   private final MotionMagicDutyCycle mmOut = new MotionMagicDutyCycle(0);

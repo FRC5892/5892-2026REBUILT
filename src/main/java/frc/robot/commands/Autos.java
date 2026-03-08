@@ -37,16 +37,21 @@ public class Autos {
       }
       // Boilerplate is over. Now do the actual logic
       final Command auto =
-      Commands.sequence(
-          Commands.race(
-            Commands.sequence(AutoBuilder.followPath(loadPath("Left_Path_Start", points)),AutoBuilder.followPath(loadPath("Left_Path_Return", points))),intake.intakeSequence()
-          ),
-          Commands.race(ShootCommands.shoot(indexer, shooter,Goal.HUB),Commands.waitSeconds(7)),
-          Commands.race(
-            Commands.sequence(AutoBuilder.followPath(loadPath("Left_Path", points)),AutoBuilder.followPath(loadPath("Left_Path_Return", points))),intake.intakeSequence()
-          ),
-          Commands.race(ShootCommands.shoot(indexer, shooter,Goal.HUB),Commands.waitSeconds(7))
-          );
+          Commands.sequence(
+              Commands.race(
+                  Commands.sequence(
+                      AutoBuilder.followPath(loadPath("Left_Path_Start", points)),
+                      AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
+                  intake.intakeSequence()),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
+              Commands.race(
+                  Commands.sequence(
+                      AutoBuilder.followPath(loadPath("Left_Path", points)),
+                      AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
+                  intake.intakeSequence()),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
@@ -62,7 +67,7 @@ public class Autos {
     }
   }
 
-    public static Command rightAuto(Intake intake, Indexer indexer, Shooter shooter) {
+  public static Command rightAuto(Intake intake, Indexer indexer, Shooter shooter) {
     try {
       final ArrayList<PathPoint> points;
       if (Constants.currentMode == Constants.Mode.SIM) {
@@ -72,16 +77,21 @@ public class Autos {
       }
       // Boilerplate is over. Now do the actual logic
       final Command auto =
-      Commands.sequence(
-          Commands.race(
-            Commands.sequence(AutoBuilder.followPath(loadPath("Right_Path_Start", points)),AutoBuilder.followPath(loadPath("Right_Path_Return", points))),intake.intakeSequence()
-          ),
-          Commands.race(ShootCommands.shoot(indexer, shooter,Goal.HUB),Commands.waitSeconds(7)),
-          Commands.race(
-            Commands.sequence(AutoBuilder.followPath(loadPath("Right_Path", points)),AutoBuilder.followPath(loadPath("Right_Path_Return", points))),intake.intakeSequence()
-          ),
-          Commands.race(ShootCommands.shoot(indexer, shooter,Goal.HUB),Commands.waitSeconds(7))
-          );
+          Commands.sequence(
+              Commands.race(
+                  Commands.sequence(
+                      AutoBuilder.followPath(loadPath("Right_Path_Start", points)),
+                      AutoBuilder.followPath(loadPath("Right_Path_Return", points))),
+                  intake.intakeSequence()),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
+              Commands.race(
+                  Commands.sequence(
+                      AutoBuilder.followPath(loadPath("Right_Path", points)),
+                      AutoBuilder.followPath(loadPath("Right_Path_Return", points))),
+                  intake.intakeSequence()),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
