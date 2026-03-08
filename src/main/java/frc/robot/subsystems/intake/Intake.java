@@ -50,7 +50,7 @@ public class Intake extends SubsystemBase {
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(34.5));
     this.slapDownMotor = slapDownMotor.withConfig(slapDownConfig).withMMPIDTuning(slapDownConfig);
 
-    setDefaultCommand(retractForeverCommand());
+    // setDefaultCommand(retractForeverCommand());
   }
 
   public Command intakeCommand() {
