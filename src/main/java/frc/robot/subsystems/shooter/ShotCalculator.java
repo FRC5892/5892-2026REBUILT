@@ -71,23 +71,23 @@ public class ShotCalculator {
       new InterpolatingDoubleTreeMap();
 
   static {
-    minDistance = Units.feetToMeters(2);
-    maxDistance = Units.feetToMeters(7);
+    minDistance = Units.feetToMeters(2 + 2);
+    maxDistance = Units.feetToMeters(7 + 2);
     phaseDelay = 0.03; // TODO: untuned
     // These are in degrees from verical
-    shotHoodAngleMap.put(Units.feetToMeters(2), Rotation2d.fromDegrees(22.0));
-    shotHoodAngleMap.put(Units.feetToMeters(4), Rotation2d.fromDegrees(28.0));
-    shotHoodAngleMap.put(Units.feetToMeters(6), Rotation2d.fromDegrees(32.0));
-    shotHoodAngleMap.put(Units.feetToMeters(6 + (11 / 12)), Rotation2d.fromDegrees(29.0));
+    shotHoodAngleMap.put(Units.feetToMeters(2 + 2), Rotation2d.fromDegrees(22.0));
+    shotHoodAngleMap.put(Units.feetToMeters(4 + 2), Rotation2d.fromDegrees(28.0));
+    shotHoodAngleMap.put(Units.feetToMeters(6 + 2), Rotation2d.fromDegrees(32.0));
+    shotHoodAngleMap.put(Units.feetToMeters(6 + (11 / 12) + 2), Rotation2d.fromDegrees(29.0));
     shotHoodAngleMap.put(
         Units.feetToMeters(197.94), Rotation2d.fromDegrees(42.0)); // 147.5 x, 132 y =
-    // shotHoodAngleMap.put(Units.feetToMeters(13), Rotation2d.fromDegrees(44.0));
+    // shotHoodAngleMap.put(Units.feetToMeters(13 + 2), Rotation2d.fromDegrees(44.0));
 
     // M vs RPS
-    shotFlywheelSpeedMap.put(Units.feetToMeters(2), 53.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(4), 60.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(6), 66.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(6 + (11 / 12)), 82.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(2 + 2), 53.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(4 + 2), 60.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(6 + 2), 66.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(6 + (11 / 12) + 2), 82.0);
     // shotFlywheelSpeedMap.put(Units.feetToMeters(11 + 2), 72.0);
     // shotFlywheelSpeedMap.put(Units.feetToMeters(13 + 2), 77.0);
 
