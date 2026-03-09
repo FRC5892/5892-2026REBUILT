@@ -17,6 +17,7 @@ import frc.robot.util.LoggedTalon.TalonFX.PhoenixTalonFX;
 import frc.robot.util.LoggedTalon.TalonFX.TalonFXFlywheelSim;
 import frc.robot.util.LoggedTalon.TalonFX.TalonFXSimpleMotorSim;
 import frc.robot.util.LoggedTalon.TalonFXS.NoOppTalonFXS;
+import frc.robot.util.LoggedTalon.TalonFXS.PhoenixTalonFXS;
 import frc.robot.util.LoggedTalon.TalonFXS.TalonFXSSimpleMotorSim;
 import java.util.function.DoubleSupplier;
 import lombok.Getter;
@@ -37,8 +38,8 @@ public class Shooter {
                     bus,
                     "Flywheel",
                     new PhoenixTalonFollower(26, MotorAlignmentValue.Opposed)));
-        // hood = new Hood(new PhoenixTalonFXS(27, bus, "Hood"));
-        hood = new Hood(new NoOppTalonFXS("Hood", 0));
+        hood = new Hood(new PhoenixTalonFXS(27, bus, "Hood"));
+        // hood = new Hood(new NoOppTalonFXS("Hood", 0));
         turret =
             new Turret(
                 new PhoenixTalonFX(28, bus, "Turret"),
