@@ -110,7 +110,7 @@ public class Hood extends SubsystemBase {
 
     // TODO: Uncomment before flight
     setDefaultCommand(aimCommand());
-    new Trigger(this::shouldStow).whileTrue(stowCommand());
+    // new Trigger(this::shouldStow).whileTrue(stowCommand());
 
     SmartDashboard.putData("Hood/SetHomed", runOnce(() -> setHomed(true)).ignoringDisable(true));
   }
