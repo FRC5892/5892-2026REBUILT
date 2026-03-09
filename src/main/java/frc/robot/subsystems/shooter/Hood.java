@@ -49,13 +49,13 @@ public class Hood extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngle> downPosition =
       new LoggedTunableMeasure<>("Hood/DownPosition", Degrees.mutable(18.575));
   private final LoggedTunableMeasure<MutAngle> stowPosition =
-      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(19));
+      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(19.5));
   public static LoggedTunableNumber stowTrenchGapOffset =
       new LoggedTunableNumber("Hood/stowTrenchGapOffset", 0, "m");
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Hood/Tolerance", Degrees.mutable(2));
   private final LoggedTunableMeasure<MutAngle> maxPosition =
-      new LoggedTunableMeasure<>("Hood/MaxPosition", Degrees.mutable(38));
+      new LoggedTunableMeasure<>("Hood/MaxPosition", Degrees.mutable(23));
   private final LoggedTunableMeasure<MutAngle> minPosition =
       new LoggedTunableMeasure<>("Hood/MinPosition", Degrees.mutable(1));
   private final LoggedTunableMeasure<MutAngle> staticPosition =
@@ -97,7 +97,7 @@ public class Hood extends SubsystemBase {
             .withMotionMagic(
                 new MotionMagicConfigs()
                     .withMotionMagicCruiseVelocity(15)
-                    .withMotionMagicAcceleration(30))
+                    .withMotionMagicAcceleration(15))
             .withMotorOutput(
                 new MotorOutputConfigs()
                     .withNeutralMode(NeutralModeValue.Brake)
