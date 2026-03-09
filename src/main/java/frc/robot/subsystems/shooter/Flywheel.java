@@ -81,8 +81,7 @@ public class Flywheel extends SubsystemBase {
           }
           setSetpoint(
               RotationsPerSecond.of(
-                  ShotCalculator.getInstance().calculateShot().flywheelSpeedRotPerSec())
-                );
+                  ShotCalculator.getInstance().calculateShot().flywheelSpeedRotPerSec()));
         });
   }
 
