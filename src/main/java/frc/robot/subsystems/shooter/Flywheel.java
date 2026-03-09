@@ -28,7 +28,7 @@ public class Flywheel extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngularVelocity> tolerance =
       new LoggedTunableMeasure<>("Flywheel/Tolerance", RotationsPerSecond.mutable(5));
   private final LoggedTunableMeasure<MutAngularVelocity> staticSpeed =
-      new LoggedTunableMeasure<>("Flywheel/staticSpeed", RotationsPerSecond.mutable(66));
+      new LoggedTunableMeasure<>("Flywheel/staticSpeed", RotationsPerSecond.mutable(60));
 
   private final LoggedNetworkBoolean estopFlag =
       new LoggedNetworkBoolean("SmartDashboard/FlywheelEStop", false);

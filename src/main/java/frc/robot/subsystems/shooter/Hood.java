@@ -59,7 +59,7 @@ public class Hood extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngle> minPosition =
       new LoggedTunableMeasure<>("Hood/MinPosition", Degrees.mutable(1));
   private final LoggedTunableMeasure<MutAngle> staticPosition =
-      new LoggedTunableMeasure<>("Hood/StaticPosition", Degrees.mutable(18.575));
+      new LoggedTunableMeasure<>("Hood/StaticPosition", Degrees.mutable(28));
 
   /* Homing */
   private final LoggedTunableNumber homingDutyCycle =
