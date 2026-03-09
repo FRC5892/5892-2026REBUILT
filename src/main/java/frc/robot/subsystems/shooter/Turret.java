@@ -54,9 +54,9 @@ public class Turret extends SubsystemBase {
 
   /* Movement Constants */
   private final LoggedTunableMeasure<MutAngle> minAngle =
-      new LoggedTunableMeasure<MutAngle>("Turret/MinAngle", Degrees.mutable(-190));
+      new LoggedTunableMeasure<MutAngle>("Turret/MinAngle", Degrees.mutable(-202));
   private final LoggedTunableMeasure<MutAngle> maxAngle =
-      new LoggedTunableMeasure<MutAngle>("Turret/MaxAngle", Degrees.mutable(200));
+      new LoggedTunableMeasure<MutAngle>("Turret/MaxAngle", Degrees.mutable(205));
   /* Homing */
   private final LoggedTunableNumber homingVoltage =
       new LoggedTunableNumber("Turret/Homing/Voltage", 4, "v");
@@ -69,13 +69,13 @@ public class Turret extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Turret/Tolerance", Degrees.mutable(5));
   private final LoggedTunableMeasure<MutAngle> pot0Pose =
-      new LoggedTunableMeasure<MutAngle>("Turret/Pot/0Pose", Degrees.mutable(220));
+      new LoggedTunableMeasure<MutAngle>("Turret/Pot/0Pose", Degrees.mutable(205.7));
   private final LoggedTunableMeasure<MutAngle> potRange =
       new LoggedTunableMeasure<MutAngle>("Turret/Pot/Range", Degrees.mutable(423.817787419));
   private final LoggedTunableMeasure<MutAngle> wrapWarningThreshold =
       new LoggedTunableMeasure<>("Turret/WrapWarningThreshold", Degrees.mutable(10));
   private final LoggedTunableMeasure<MutAngle> offset =
-      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(48.4));
+      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(58.2));
 
   private final LoggedTunableMeasure<MutAngle> staticPose =
       new LoggedTunableMeasure<MutAngle>("Turret/StaticPose", Degrees.mutable(0));

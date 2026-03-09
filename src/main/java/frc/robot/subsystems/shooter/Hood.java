@@ -16,7 +16,6 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rectangle2d;
@@ -55,13 +54,13 @@ public class Hood extends SubsystemBase {
       new LoggedTunableNumber("Hood/stowTrenchGapOffset", 0, "m");
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Hood/Tolerance", Degrees.mutable(2));
-      private final LoggedTunableMeasure<MutAngle> maxPosition =
+  private final LoggedTunableMeasure<MutAngle> maxPosition =
       new LoggedTunableMeasure<>("Hood/MaxPosition", Degrees.mutable(38));
-           private final LoggedTunableMeasure<MutAngle> minPosition =
-      new LoggedTunableMeasure<>("Hood/MinPosition", Degrees.mutable(1)); 
+  private final LoggedTunableMeasure<MutAngle> minPosition =
+      new LoggedTunableMeasure<>("Hood/MinPosition", Degrees.mutable(1));
   private final LoggedTunableMeasure<MutAngle> staticPosition =
       new LoggedTunableMeasure<>("Hood/StaticPosition", Degrees.mutable(18.575));
-      
+
   /* Homing */
   private final LoggedTunableNumber homingDutyCycle =
       new LoggedTunableNumber("Hood/Homing/DutyCycle", -0.1, "%");
@@ -269,7 +268,10 @@ public class Hood extends SubsystemBase {
    */
   private void angleToPosition(Rotation2d angle, MutAngle positionOut) {
     positionOut.mut_setBaseUnitMagnitude(
-        MathUtil.clamp(angle.getRadians() - downPosition.get().baseUnitMagnitude(),minPosition.get().baseUnitMagnitude(),maxPosition.get().baseUnitMagnitude()));
+        MathUtil.clamp(
+            angle.getRadians() - downPosition.get().baseUnitMagnitude(),
+            minPosition.get().baseUnitMagnitude(),
+            maxPosition.get().baseUnitMagnitude()));
   }
 
   /**
