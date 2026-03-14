@@ -11,6 +11,5 @@ public class Spindexer extends RollerSubsystem {
         motor.withConfig(LoggedTalonFX.buildStandardConfig(80, 60, NeutralModeValue.Coast)),
         new LoggedTunableNumber("Spindexer/Speed", 0.60),
         new LoggedTunableNumber("Spindexer/UnjamSpeed", -0.25));
-  
   }
 }

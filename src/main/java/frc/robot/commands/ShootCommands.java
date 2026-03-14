@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.RobotState;
 import frc.robot.subsystems.indexer.Indexer;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShotCalculator.Goal;
 import lombok.AccessLevel;
@@ -20,8 +21,10 @@ public class ShootCommands {
         .beforeStarting(() -> RobotState.getInstance().setGoal(goal));
   }
 
-  public static Command shoot(Indexer indexer, Shooter shooter) {
+  public static Command shoot(Indexer indexer, Shooter shooter, Intake intake) {
     return Commands.race(
+      
+        intake.retractCommand(),
         indexer.outtake(),
         shooter.getFlywheel().aimCommand(),
         shooter.getHood().aimCommand(),
