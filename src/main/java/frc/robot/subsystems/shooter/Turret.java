@@ -54,9 +54,9 @@ public class Turret extends SubsystemBase {
 
   /* Movement Constants */
   private final LoggedTunableMeasure<MutAngle> minAngle =
-      new LoggedTunableMeasure<MutAngle>("Turret/MinAngle", Degrees.mutable(-210));
+      new LoggedTunableMeasure<MutAngle>("Turret/MinAngle", Degrees.mutable(-202));
   private final LoggedTunableMeasure<MutAngle> maxAngle =
-      new LoggedTunableMeasure<MutAngle>("Turret/MaxAngle", Degrees.mutable(210));
+      new LoggedTunableMeasure<MutAngle>("Turret/MaxAngle", Degrees.mutable(205));
   /* Homing */
   private final LoggedTunableNumber homingVoltage =
       new LoggedTunableNumber("Turret/Homing/Voltage", 4, "v");
