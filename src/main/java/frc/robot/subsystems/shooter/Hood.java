@@ -16,6 +16,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rectangle2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,7 +25,6 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotState;
@@ -38,6 +38,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 public class Hood extends SubsystemBase {
   /* Hardware */
@@ -47,16 +48,28 @@ public class Hood extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngle> downPosition =
       new LoggedTunableMeasure<>("Hood/DownPosition", Degrees.mutable(18.575));
   private final LoggedTunableMeasure<MutAngle> stowPosition =
-      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(15));
+      new LoggedTunableMeasure<>("Hood/StowAngle", Degrees.mutable(19.5));
   public static LoggedTunableNumber stowTrenchGapOffset =
       new LoggedTunableNumber("Hood/stowTrenchGapOffset", 0, "m");
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Hood/Tolerance", Degrees.mutable(2));
+  private final LoggedTunableMeasure<MutAngle> maxPosition =
+      new LoggedTunableMeasure<>("Hood/MaxPosition", Degrees.mutable(23));
+  private final LoggedTunableMeasure<MutAngle> minPosition =
+      new LoggedTunableMeasure<>("Hood/MinPosition", Degrees.mutable(1));
+  private final LoggedTunableMeasure<MutAngle> staticPosition =
+      new LoggedTunableMeasure<>("Hood/StaticPosition", Degrees.mutable(28));
+
   /* Homing */
   private final LoggedTunableNumber homingDutyCycle =
       new LoggedTunableNumber("Hood/Homing/DutyCycle", -0.1, "%");
   private final LoggedTunableNumber homingCurrentThreshold =
       new LoggedTunableNumber("Hood/Homing/CurrentThreshold", 10, "A");
+
+  private final LoggedNetworkBoolean estopFlag =
+      new LoggedNetworkBoolean("SmartDashboard/HoodEStop", false);
+  private final LoggedNetworkBoolean staticFlag =
+      new LoggedNetworkBoolean("SmartDashboard/HoodStatic", false);
 
   /* State */
   /** The target position of the motor. 0 is the hood resting on the turret. */
@@ -83,7 +96,7 @@ public class Hood extends SubsystemBase {
             .withMotionMagic(
                 new MotionMagicConfigs()
                     .withMotionMagicCruiseVelocity(15)
-                    .withMotionMagicAcceleration(30))
+                    .withMotionMagicAcceleration(15))
             .withMotorOutput(
                 new MotorOutputConfigs()
                     .withNeutralMode(NeutralModeValue.Brake)
@@ -104,19 +117,27 @@ public class Hood extends SubsystemBase {
   public Command aimCommand() {
     return run(
         () -> {
-          if (homed) {
-            this.requestAngle(ShotCalculator.getInstance().calculateShot().hoodAngle());
+          if (!homed) return;
+
+          if (estopFlag.get()) {
+            motor.setControl(neutralControl);
+            return;
           }
+          if (staticFlag.get()) {
+            this.requestAngle(new Rotation2d(staticPosition.get()));
+            return;
+          }
+          this.requestAngle(ShotCalculator.getInstance().calculateShot().hoodAngle());
         });
   }
 
   public Command stowCommand() {
     return startEnd(
-            () -> {
-              this.requestAngle(new Rotation2d(stowPosition.get()));
-            },
-            () -> {})
-        .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
+        () -> {
+          this.requestAngle(new Rotation2d(stowPosition.get()));
+        },
+        () -> {});
+    // .withInterruptBehavior(InterruptionBehavior.kCancelIncoming);
   }
 
   // TODO: Create a real homing sequence w/ sensorless homing
@@ -246,7 +267,10 @@ public class Hood extends SubsystemBase {
    */
   private void angleToPosition(Rotation2d angle, MutAngle positionOut) {
     positionOut.mut_setBaseUnitMagnitude(
-        angle.getRadians() - downPosition.get().baseUnitMagnitude());
+        MathUtil.clamp(
+            angle.getRadians() - downPosition.get().baseUnitMagnitude(),
+            minPosition.get().baseUnitMagnitude(),
+            maxPosition.get().baseUnitMagnitude()));
   }
 
   /**

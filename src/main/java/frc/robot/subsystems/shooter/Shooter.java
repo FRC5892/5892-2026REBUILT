@@ -39,6 +39,7 @@ public class Shooter {
                     "Flywheel",
                     new PhoenixTalonFollower(26, MotorAlignmentValue.Opposed)));
         hood = new Hood(new PhoenixTalonFXS(27, bus, "Hood"));
+        // hood = new Hood(new NoOppTalonFXS("Hood", 0));
         turret =
             new Turret(
                 new PhoenixTalonFX(28, bus, "Turret"),

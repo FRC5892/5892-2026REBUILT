@@ -13,7 +13,6 @@ import static frc.robot.subsystems.vision.VisionConstants.cameraLeftName;
 import static frc.robot.subsystems.vision.VisionConstants.cameraRightName;
 
 import com.ctre.phoenix6.CANBus;
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -22,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ShootCommands;
 import frc.robot.generated.TunerConstants;
@@ -151,7 +151,11 @@ public class RobotContainer {
     // led = new Led();
 
     // Set up auto routines
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+
+    autoChooser.addOption("Left Auto", Autos.leftAuto(intake, indexer, shooter));
+    autoChooser.addOption("Right Auto", Autos.rightAuto(intake, indexer, shooter));
+    autoChooser.addOption("Preload Auto", ShootCommands.shoot(indexer, shooter));
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -202,10 +206,14 @@ public class RobotContainer {
         .rightBumper()
         .or(coDriveController.rightBumper())
         .whileTrue(ShootCommands.shoot(indexer, shooter));
+    driveController.leftBumper().or(coDriveController.leftBumper()).onTrue(intake.intakeSequence());
+    driveController.povUp().or(coDriveController.povUp()).onTrue(intake.hold());
+    driveController.povLeft().or(coDriveController.povUp()).onTrue(intake.retractForeverCommand());
+
     driveController
-        .leftBumper()
-        .or(coDriveController.leftBumper())
-        .toggleOnTrue(intake.intakeSequence());
+        .povDown()
+        .or(coDriveController.povDown())
+        .whileTrue(shooter.getHood().stowCommand());
 
     driveController
         .start()
@@ -227,7 +235,12 @@ public class RobotContainer {
     driveController
         .a()
         .or(coDriveController.a())
-        .onTrue(RobotState.getInstance().setGoalCommand(Goal.CENTER));
+        .onTrue(
+            shooter
+                .getTurret()
+                .forceZero()
+                .andThen(shooter.getTurret().gotoPosition(() -> Degree.of(0)))
+                .alongWith(Commands.run(() -> {})));
     driveController
         .y()
         .or(coDriveController.y())
@@ -240,9 +253,27 @@ public class RobotContainer {
                 drive, () -> -driveController.getLeftY(), () -> -driveController.getLeftX()));
 
     if (testController != null) {
-      testController.x().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(-120)));
-      testController.a().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(0)));
-      testController.b().onTrue(shooter.getTurret().gotoPosition(() -> Degree.of(120)));
+      testController
+          .x()
+          .onTrue(
+              shooter
+                  .getTurret()
+                  .gotoPosition(() -> Degree.of(-120))
+                  .alongWith(Commands.run(() -> {})));
+      testController
+          .a()
+          .onTrue(
+              shooter
+                  .getTurret()
+                  .gotoPosition(() -> Degree.of(0))
+                  .alongWith(Commands.run(() -> {})));
+      testController
+          .b()
+          .onTrue(
+              shooter
+                  .getTurret()
+                  .gotoPosition(() -> Degree.of(120))
+                  .alongWith(Commands.run(() -> {})));
       testController
           .leftBumper()
           .onTrue(shooter.getHood().gotoAngle(() -> Rotation2d.fromDegrees(19)));
