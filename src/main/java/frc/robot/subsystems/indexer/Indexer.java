@@ -50,9 +50,10 @@ public class Indexer {
 
   public Command outtake() {
     return Commands.parallel(
-        kicker.runRoller(),
-        rollers.runRoller(Direction.FORWARD),
-        spindexer.runRoller(Direction.FORWARD));
+            kicker.runRoller(),
+            rollers.runRoller(Direction.FORWARD),
+            spindexer.runRoller(Direction.FORWARD))
+        .withName("Indexer Outtake");
   }
 
   public Command unjam() {

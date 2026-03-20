@@ -138,14 +138,13 @@ public class Turret extends SubsystemBase {
     // Preload so AdvantageKit can process logging stuff before the match starts.
     ShotCalculator.getInstance().calculateShot();
 
-    RobotModeTriggers.disabled().onFalse(updateFromAbsoluteCommand());
-
+    RobotModeTriggers.disabled().onTrue(updateFromAbsoluteCommand());
     setDefaultCommand(aimCommand());
+    updateFromAbsolute();
   }
 
   public Command aimCommand() {
-    return run(
-        () -> {
+    return run(() -> {
           if (!homed) return;
           if (estopFlag.get()) {
             positionControl = false;
@@ -165,7 +164,8 @@ public class Turret extends SubsystemBase {
                   MathUtil.angleModulus(
                       ShotCalculator.getInstance().calculateShot().turretAngle().getRadians()
                           + offset.get().baseUnitMagnitude())));
-        });
+        })
+        .withName("Turret Aim");
   }
 
   public Command homingCommand() {

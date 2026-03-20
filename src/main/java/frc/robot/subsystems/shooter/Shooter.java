@@ -83,8 +83,11 @@ public class Shooter {
   }
 
   public ParallelCommandGroup tuneCommand(DoubleSupplier speed, DoubleSupplier angle) {
-    return new ParallelCommandGroup(
-        flywheel.setpointTestCommand(speed),
-        hood.requestAngle(() -> Rotation2d.fromDegrees(angle.getAsDouble())));
+    var command =
+        new ParallelCommandGroup(
+            flywheel.setpointTestCommand(speed),
+            hood.requestAngle(() -> Rotation2d.fromDegrees(angle.getAsDouble())));
+    command.setName("Shooter Tune");
+    return command;
   }
 }

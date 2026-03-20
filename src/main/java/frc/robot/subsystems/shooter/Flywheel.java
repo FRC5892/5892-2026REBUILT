@@ -69,8 +69,7 @@ public class Flywheel extends SubsystemBase {
   }
 
   public Command aimCommand() {
-    return run(
-        () -> {
+    return run(() -> {
           if (estopFlag.get()) {
             motor.setControl(control.withVelocity(0));
             return;
@@ -82,7 +81,8 @@ public class Flywheel extends SubsystemBase {
           setSetpoint(
               RotationsPerSecond.of(
                   ShotCalculator.getInstance().calculateShot().flywheelSpeedRotPerSec()));
-        });
+        })
+        .withName("Flywheel Aim");
   }
 
   @Override

@@ -10,12 +10,10 @@ package frc.robot;
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.PhoenixUtil;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -89,23 +87,24 @@ public class Robot extends LoggedRobot {
     // }
 
     CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-
-    Map<String, Integer> commandCounts = new HashMap<>();
-    BiConsumer<Command, Boolean> logCommandFunction =
-        (Command command, Boolean active) -> {
-          String name = command.getName();
-          int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
-          commandCounts.put(name, count);
-          Logger.recordOutput(
-              "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()), active);
-          Logger.recordOutput("CommandsAll/" + name, count > 0);
-        };
-    CommandScheduler.getInstance()
-        .onCommandInitialize((Command command) -> logCommandFunction.accept(command, true));
-    CommandScheduler.getInstance()
-        .onCommandFinish((Command command) -> logCommandFunction.accept(command, false));
-    CommandScheduler.getInstance()
-        .onCommandInterrupt((Command command) -> logCommandFunction.accept(command, false));
+    SmartDashboard.putData(CommandScheduler.getInstance());
+    //    Map<String, Integer> commandCounts = new HashMap<>();
+    //    BiConsumer<Command, Boolean> logCommandFunction =
+    //        (Command command, Boolean active) -> {
+    //          String name = command.getName();
+    //          int count = commandCounts.getOrDefault(name, 0) + (active ? 1 : -1);
+    //          commandCounts.put(name, count);
+    //          Logger.recordOutput(
+    //              "CommandsUnique/" + name + "_" + Integer.toHexString(command.hashCode()),
+    // active);
+    //          Logger.recordOutput("CommandsAll/" + name, count > 0);
+    //        };
+    //    CommandScheduler.getInstance()
+    //        .onCommandInitialize((Command command) -> logCommandFunction.accept(command, true));
+    //    CommandScheduler.getInstance()
+    //        .onCommandFinish((Command command) -> logCommandFunction.accept(command, false));
+    //    CommandScheduler.getInstance()
+    //        .onCommandInterrupt((Command command) -> logCommandFunction.accept(command, false));
   }
 
   /** This function is called periodically during all modes. */
