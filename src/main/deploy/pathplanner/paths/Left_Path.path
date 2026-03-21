@@ -12,7 +12,7 @@
         "y": 7.377510004873674
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left_Path_Under_Trench_Start"
     },
     {
       "anchor": {
@@ -28,25 +28,25 @@
         "y": 6.3882564666324875
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left_Path_Under_Trench_Turn"
     },
     {
       "anchor": {
         "x": 7.808,
-        "y": 3.676
+        "y": 5.0
       },
       "prevControl": {
         "x": 7.787793699225655,
-        "y": 3.9251820728082514
+        "y": 5.249182072808251
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left_Path_Under_Trench_End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5614973262032087,
+      "waypointRelativePos": 0.6,
       "rotationDegrees": 0.0
     },
     {
@@ -67,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -45.0
   },
   "reversed": false,
   "folder": null,

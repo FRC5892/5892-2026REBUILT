@@ -20,37 +20,37 @@
         "y": 6.972
       },
       "prevControl": {
-        "x": 6.751817234057974,
-        "y": 7.577553731317508
+        "x": 6.936890001038853,
+        "y": 7.746917033636575
       },
       "nextControl": {
-        "x": 8.174099912083944,
-        "y": 6.3882564666324875
+        "x": 7.97732518869921,
+        "y": 6.251394875141084
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left_Path_Under_Trench_Turn"
     },
     {
       "anchor": {
         "x": 7.808,
-        "y": 3.676
+        "y": 5.0
       },
       "prevControl": {
         "x": 7.787793699225655,
-        "y": 3.9251820728082514
+        "y": 5.249182072808251
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left_Path_Under_Trench_End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.45410628019323546,
+      "waypointRelativePos": 0.45,
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 1.0869565217391317,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": -45.0
     }
   ],
