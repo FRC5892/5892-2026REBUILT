@@ -63,9 +63,9 @@ public class Turret extends SubsystemBase {
   private final LoggedTunableNumber homingConfirmationVoltage =
       new LoggedTunableNumber("Turret/Homing/ConfirmVoltage", 4, "v");
   private final LoggedTunableMeasure<MutAngle> homingSwitchPosition =
-      new LoggedTunableMeasure<>("Turret/Homing/homePosition", Degrees.mutable(0));
+      new LoggedTunableMeasure<>("Turret/Homing/HomePosition", Degrees.mutable(0));
   private final LoggedTunableMeasure<MutAngle> homingConfirmPosition =
-      new LoggedTunableMeasure<>("Turret/Homing/homePosition", Degrees.mutable(0.1));
+      new LoggedTunableMeasure<>("Turret/Homing/ConfirmPosition", Degrees.mutable(0.1));
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Turret/Tolerance", Degrees.mutable(5));
   private final LoggedTunableMeasure<MutAngle> pot0Pose =
