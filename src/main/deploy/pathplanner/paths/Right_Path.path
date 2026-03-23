@@ -12,7 +12,7 @@
         "y": 0.6224899951263261
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right_Path_Under_Trench_Start"
     },
     {
       "anchor": {
@@ -33,20 +33,20 @@
     {
       "anchor": {
         "x": 7.808,
-        "y": 3.676
+        "y": 3.0
       },
       "prevControl": {
         "x": 7.787793699225655,
-        "y": 3.426817927191749
+        "y": 2.750817927191749
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right_Path_Under_Trench_End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.6,
       "rotationDegrees": 0.0
     },
     {

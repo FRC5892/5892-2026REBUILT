@@ -115,8 +115,7 @@ public class Hood extends SubsystemBase {
   }
 
   public Command aimCommand() {
-    return run(
-        () -> {
+    return run(() -> {
           if (!homed) return;
 
           if (estopFlag.get()) {
@@ -128,7 +127,8 @@ public class Hood extends SubsystemBase {
             return;
           }
           this.requestAngle(ShotCalculator.getInstance().calculateShot().hoodAngle());
-        });
+        })
+        .withName("Hood Aim");
   }
 
   public Command stowCommand() {
