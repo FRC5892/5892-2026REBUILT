@@ -155,7 +155,13 @@ public class Hood extends SubsystemBase {
             motor.setPosition(Degrees.of(0));
           }
         },
-        () -> Math.abs(motor.getPrimaryTorqueCurrentAmps()) >= homingCurrentThreshold.get(),
+        () -> {
+          if (homingDutyCycle.get()>0) {
+            return motor.getPrimaryTorqueCurrentAmps() >= homingCurrentThreshold.get();
+          } else {
+            return motor.getPrimaryTorqueCurrentAmps() <= -homingCurrentThreshold.get();
+          }
+        },
         this);
   }
 
