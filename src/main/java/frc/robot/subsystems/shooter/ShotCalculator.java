@@ -75,19 +75,18 @@ public class ShotCalculator {
     maxDistance = Units.feetToMeters(7 + 2);
     phaseDelay = 0.03; // TODO: untuned
     // These are in degrees from verical
-    shotHoodAngleMap.put(Units.feetToMeters(2 + 2), Rotation2d.fromDegrees(22.0));
-    shotHoodAngleMap.put(Units.feetToMeters(4 + 2), Rotation2d.fromDegrees(28.0));
-    shotHoodAngleMap.put(Units.feetToMeters(6 + 2), Rotation2d.fromDegrees(32.0));
-    shotHoodAngleMap.put(Units.feetToMeters(6 + (11 / 12) + 2), Rotation2d.fromDegrees(29.0));
-    shotHoodAngleMap.put(
-        Units.inchesToMeters(197.94), Rotation2d.fromDegrees(42.0)); // 147.5 x, 132 y =
+    shotHoodAngleMap.put(Units.feetToMeters(6 + 2), Rotation2d.fromDegrees(42.0));
+    shotHoodAngleMap.put(Units.feetToMeters(8 + 2), Rotation2d.fromDegrees(42.0));
+    shotHoodAngleMap.put(Units.feetToMeters(10 + 2), Rotation2d.fromDegrees(42.0));
+    shotHoodAngleMap.put(Units.feetToMeters(12), Rotation2d.fromDegrees(42.0));
+    shotHoodAngleMap.put(Units.feetToMeters(16), Rotation2d.fromDegrees(42.0)); // 147.5 x, 132 y =
 
     // M vs RPS
-    shotFlywheelSpeedMap.put(Units.feetToMeters(2 + 2), 53.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(4 + 2), 60.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(6 + 2), 66.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(6 + (11 / 12) + 2), 68.0);
-    shotFlywheelSpeedMap.put(Units.inchesToMeters(197.94), 82.0); // 147.5 x, 132 y =
+    shotFlywheelSpeedMap.put(Units.feetToMeters(6 + 2), 61.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(8 + 2), 65.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(10 + 2), 74.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(12 + 2), 79.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(16 + 2), 98.0);
 
     // TODO: Untuned M vs S
     timeOfFlightMap.put(5.68, 1.16);

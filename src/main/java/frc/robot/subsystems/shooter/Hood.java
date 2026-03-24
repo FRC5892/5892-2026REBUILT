@@ -156,7 +156,7 @@ public class Hood extends SubsystemBase {
           }
         },
         () -> {
-          if (homingDutyCycle.get()>0) {
+          if (homingDutyCycle.get() > 0) {
             return motor.getPrimaryTorqueCurrentAmps() >= homingCurrentThreshold.get();
           } else {
             return motor.getPrimaryTorqueCurrentAmps() <= -homingCurrentThreshold.get();
@@ -167,7 +167,7 @@ public class Hood extends SubsystemBase {
 
   /**
    * A command that requests the turret to move to a robot-relative angle. The command completes
-   * imminently, without waiting for a tolerance to be achieved.
+   * immediately, without waiting for a tolerance to be achieved.
    *
    * @param angle a supplier of the target angle. The angle is relative to vertical. 0 is vertical,
    *     90 is horizontal

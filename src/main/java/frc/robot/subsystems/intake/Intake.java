@@ -24,13 +24,13 @@ public class Intake extends SubsystemBase {
   private final LoggedTunableNumber rollerSpeed =
       new LoggedTunableNumber("Intake/RollerSpeed", 0.5);
   private final LoggedTunableMeasure<MutAngle> outPosition =
-      new LoggedTunableMeasure<>("Intake/OutPosition", Rotation.mutable(-0.6521));
+      new LoggedTunableMeasure<>("Intake/OutPosition", Rotation.mutable(0.47));
   private final LoggedTunableMeasure<MutAngle> holdPosition =
-      new LoggedTunableMeasure<>("Intake/HoldPosition", Rotation.mutable(-0.32));
+      new LoggedTunableMeasure<>("Intake/HoldPosition", Rotation.mutable(0.32));
   private final LoggedTunableNumber extendOuttakeSpeed =
       new LoggedTunableNumber("Intake/ExtendOuttakeSpeed", -0.1);
   private final LoggedTunableMeasure<MutAngle> inPosition =
-      new LoggedTunableMeasure<>("Intake/InPosition", Rotation.mutable(0));
+      new LoggedTunableMeasure<>("Intake/InPosition", Rotation.mutable(0.02));
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Intake/Tolerance", Rotation.mutable(0.05));
 
@@ -47,7 +47,7 @@ public class Intake extends SubsystemBase {
                 new MotionMagicConfigs()
                     .withMotionMagicAcceleration(5)
                     .withMotionMagicCruiseVelocity(8))
-            .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(34.5));
+            .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(23 * (36 / 24)));
     this.slapDownMotor = slapDownMotor.withConfig(slapDownConfig).withMMPIDTuning(slapDownConfig);
 
     // setDefaultCommand(retractForeverCommand());
