@@ -25,6 +25,8 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -75,7 +77,7 @@ public class Turret extends SubsystemBase {
    * degrees) at each turret limit
    */
   private final LoggedTunableMeasure<MutAngle> pot0Pose =
-      new LoggedTunableMeasure<MutAngle>("Turret/Pot/0Pose", Degrees.mutable(209.1));
+      new LoggedTunableMeasure<MutAngle>("Turret/Pot/0Pose", Degrees.mutable(247.5));
 
   /**
    * Range of the Potentiometer: | MaxRotation - MinRotation | ----------------------------- |
@@ -85,14 +87,14 @@ public class Turret extends SubsystemBase {
    * limit MaxPercent/MinPercent: DigitalInput/TurretPot/Value at each limit
    */
   private final LoggedTunableMeasure<MutAngle> potRange =
-      new LoggedTunableMeasure<MutAngle>("Turret/Pot/Range", Degrees.mutable(423.180061038));
+      new LoggedTunableMeasure<MutAngle>("Turret/Pot/Range", Degrees.mutable(503.944174757));
 
   private final LoggedTunableMeasure<MutAngle> wrapWarningThreshold =
       new LoggedTunableMeasure<>("Turret/WrapWarningThreshold", Degrees.mutable(10));
 
   /** Difference between Turret 0 and robot forward. This needs to be fairly precise */
   private final LoggedTunableMeasure<MutAngle> offset =
-      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(57.3));
+      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(59));
 
   private final LoggedTunableMeasure<MutAngle> staticPose =
       new LoggedTunableMeasure<MutAngle>("Turret/StaticPose", Degrees.mutable(0));
@@ -133,8 +135,8 @@ public class Turret extends SubsystemBase {
                 new Slot0Configs().withKP(10).withKI(0).withKD(0).withKS(0.018).withKV(0.085))
             .withMotionMagic(
                 new MotionMagicConfigs()
-                    .withMotionMagicCruiseVelocity(15)
-                    .withMotionMagicAcceleration(30))
+                    .withMotionMagicCruiseVelocity(1)
+                    .withMotionMagicAcceleration(20))
             .withMotorOutput(
                 new MotorOutputConfigs()
                     .withNeutralMode(NeutralModeValue.Brake)
@@ -158,6 +160,8 @@ public class Turret extends SubsystemBase {
     RobotModeTriggers.disabled().onTrue(updateFromAbsoluteCommand());
     setDefaultCommand(aimCommand());
     updateFromAbsolute();
+    CommandScheduler.getInstance()
+        .schedule(Commands.waitSeconds(0.1).andThen(updateFromAbsoluteCommand()));
   }
 
   public Command aimCommand() {

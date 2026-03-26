@@ -41,6 +41,7 @@ import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.util.LoggedTalon.TalonFX.NoOppTalonFX;
 import frc.robot.util.LoggedTalon.TalonFX.PhoenixTalonFX;
 import frc.robot.util.LoggedTalon.TalonFX.TalonFXSimpleMotorSim;
+import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
@@ -190,6 +191,15 @@ public class RobotContainer {
             () -> -driveController.getLeftY(),
             () -> -driveController.getLeftX(),
             () -> -driveController.getRightX()));
+    driveController
+        .leftStick()
+        .whileTrue(
+            DriveCommands.joystickDriveStatic(
+                drive,
+                () -> -driveController.getLeftY(),
+                () -> -driveController.getLeftX(),
+                () -> -driveController.getRightX(),
+                new LoggedTunableNumber("Drive/StaticSpeedMPS", 3)));
 
     // // Reset gyro to 0° when B button is pressed
     // driveController
@@ -207,7 +217,10 @@ public class RobotContainer {
         .whileTrue(ShootCommands.shoot(indexer, shooter));
     driveController.leftBumper().or(coDriveController.leftBumper()).onTrue(intake.intakeSequence());
     driveController.povUp().or(coDriveController.povUp()).onTrue(intake.hold());
-    driveController.povLeft().or(coDriveController.povUp()).onTrue(intake.retractForeverCommand());
+    driveController
+        .povLeft()
+        .or(coDriveController.povLeft())
+        .onTrue(intake.retractForeverCommand());
 
     driveController
         .povDown()

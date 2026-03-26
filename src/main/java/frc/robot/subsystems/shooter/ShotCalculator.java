@@ -39,8 +39,7 @@ public class ShotCalculator {
       new Transform2d(
           new Translation2d(Units.inchesToMeters(-6), Units.inchesToMeters(-6)), new Rotation2d());
 
-  private static final Translation2d rightTarget =
-      AllianceFlipUtil.apply(new Translation2d(1.5, 1.5));
+  private static final Translation2d rightTarget = new Translation2d(1.5, 1.5);
 
   private static final Translation2d leftTarget =
       rightTarget.plus(new Translation2d(0, (LinesHorizontal.center - rightTarget.getX()) * 2));

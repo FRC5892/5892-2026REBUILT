@@ -42,16 +42,20 @@ public class Autos {
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Left_Path_Start", points)),
                       AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
-                  intake.intakeSequence()),
+                  intake.intakeSequence(),
+                  Commands.sequence(
+                      shooter.getHood().stowCommand().withTimeout(1),
+                      ShootCommands.shoot(indexer, shooter, Goal.LEFT))),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(5)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Left_Path", points)),
                       AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
-                  intake.intakeSequence()),
+                  intake.intakeSequence(),
+                  shooter.getHood().stowCommand()),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)));
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(5)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
@@ -82,14 +86,16 @@ public class Autos {
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Right_Path_Start", points)),
                       AutoBuilder.followPath(loadPath("Right_Path_Return", points))),
-                  intake.intakeSequence()),
+                  intake.intakeSequence(),
+                  shooter.getHood().stowCommand()),
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Right_Path", points)),
                       AutoBuilder.followPath(loadPath("Right_Path_Return", points))),
-                  intake.intakeSequence()),
+                  intake.intakeSequence(),
+                  shooter.getHood().stowCommand()),
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)));
       // More boilerplate
