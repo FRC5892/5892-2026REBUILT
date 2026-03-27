@@ -5,41 +5,57 @@
 package frc.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.Rotation;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.units.measure.MutAngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import frc.robot.util.LoggedTunableMeasure;
-import frc.robot.util.LoggedTunableNumber;
 
 public class Intake extends SubsystemBase {
   private final LoggedTalonFX rollerMotor;
   private final LoggedTalonFX slapDownMotor;
-  private final LoggedTunableNumber rollerSpeed =
-      new LoggedTunableNumber("Intake/RollerSpeed", 0.5);
+  private final LoggedTunableMeasure<MutAngularVelocity> rollerVelocity =
+      new LoggedTunableMeasure<>("Intake/RollerVelocity", RotationsPerSecond.mutable(15));
   private final LoggedTunableMeasure<MutAngle> outPosition =
       new LoggedTunableMeasure<>("Intake/OutPosition", Rotation.mutable(0.49));
   private final LoggedTunableMeasure<MutAngle> holdPosition =
       new LoggedTunableMeasure<>("Intake/HoldPosition", Rotation.mutable(0.32));
-  private final LoggedTunableNumber extendOuttakeSpeed =
-      new LoggedTunableNumber("Intake/ExtendOuttakeSpeed", -0.1);
+  private final LoggedTunableMeasure<MutAngularVelocity> extendOuttakeVelocity =
+      new LoggedTunableMeasure<>("Intake/ExtendOuttakeVelocity", RotationsPerSecond.mutable(-4));
   private final LoggedTunableMeasure<MutAngle> inPosition =
       new LoggedTunableMeasure<>("Intake/InPosition", Rotation.mutable(0.02));
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Intake/Tolerance", Rotation.mutable(0.05));
 
-  private final DutyCycleOut dutyCycleOut = new DutyCycleOut(rollerSpeed.get()).withEnableFOC(true);
+  private final VelocityTorqueCurrentFOC rollerVelocityOut = new VelocityTorqueCurrentFOC(0);
   private final MotionMagicDutyCycle mmOut = new MotionMagicDutyCycle(0);
 
   /** Creates a new Intake. */
   public Intake(LoggedTalonFX rollerMotor, LoggedTalonFX slapDownMotor) {
-    this.rollerMotor = rollerMotor.withConfig(LoggedTalonFX.buildStandardConfig(160, 40));
+    var rollerConfig =
+        LoggedTalonFX.buildStandardConfig(160, 40)
+            .withTorqueCurrent(
+                new TorqueCurrentConfigs()
+                    .withPeakForwardTorqueCurrent(80)
+                    .withPeakReverseTorqueCurrent(80))
+            .withSlot0(
+                new Slot0Configs()
+                    .withKP(0.8)
+                    .withKI(0)
+                    .withKD(0)
+                    .withKS(0.25)
+                    .withKV(0)
+                    .withKA(0));
+    this.rollerMotor = rollerMotor.withConfig(rollerConfig).withPIDTunable(rollerConfig.Slot0);
     var slapDownConfig =
         LoggedTalonFX.buildStandardConfig(80, 4020)
             .withSlot0(new Slot0Configs().withKP(10).withKI(0).withKD(0).withKS(0).withKV(0))
@@ -55,18 +71,18 @@ public class Intake extends SubsystemBase {
 
   public Command intakeCommand() {
     return startEnd(
-        () -> rollerMotor.setControl(dutyCycleOut.withOutput(rollerSpeed.get())),
-        () -> rollerMotor.setControl(dutyCycleOut.withOutput(0)));
+        () -> rollerMotor.setControl(rollerVelocityOut.withVelocity(rollerVelocity.get())),
+        () -> rollerMotor.setControl(rollerVelocityOut.withVelocity(0)));
   }
 
   public Command extendCommand() {
     return startEnd(
             () -> {
               slapDownMotor.setControl(mmOut.withPosition(this.outPosition.get()));
-              rollerMotor.setControl(dutyCycleOut.withOutput(extendOuttakeSpeed.get()));
+              rollerMotor.setControl(rollerVelocityOut.withVelocity(extendOuttakeVelocity.get()));
             },
             () -> {
-              rollerMotor.setControl(dutyCycleOut.withOutput(0));
+              rollerMotor.setControl(rollerVelocityOut.withVelocity(0));
             })
         .until(() -> slapDownMotor.atSetpoint(outPosition.get(), tolerance.get()));
   }
