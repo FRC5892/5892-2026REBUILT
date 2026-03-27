@@ -74,14 +74,15 @@ public class ShotCalculator {
     maxDistance = Units.feetToMeters(7 + 2);
     phaseDelay = 0.03; // TODO: untuned
     // These are in degrees from verical
-    shotHoodAngleMap.put(Units.feetToMeters(6 + 2), Rotation2d.fromDegrees(42.0));
+    // shotHoodAngleMap.put(Units.feetToMeters(6 + 2), Rotation2d.fromDegrees(42.0));
     shotHoodAngleMap.put(Units.feetToMeters(8 + 2), Rotation2d.fromDegrees(42.0));
     shotHoodAngleMap.put(Units.feetToMeters(10 + 2), Rotation2d.fromDegrees(42.0));
-    shotHoodAngleMap.put(Units.feetToMeters(12), Rotation2d.fromDegrees(42.0));
-    shotHoodAngleMap.put(Units.feetToMeters(16), Rotation2d.fromDegrees(42.0)); // 147.5 x, 132 y =
+    shotHoodAngleMap.put(Units.feetToMeters(12 + 2), Rotation2d.fromDegrees(42.0));
+    shotHoodAngleMap.put(
+        Units.feetToMeters(16 + 2), Rotation2d.fromDegrees(42.0)); // 147.5 x, 132 y =
 
     // M vs RPS
-    shotFlywheelSpeedMap.put(Units.feetToMeters(6 + 2), 61.0);
+    // shotFlywheelSpeedMap.put(Units.feetToMeters(6 + 2), 61.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(8 + 2), 65.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(10 + 2), 74.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(12 + 2), 79.0);

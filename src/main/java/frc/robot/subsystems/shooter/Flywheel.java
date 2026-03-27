@@ -48,10 +48,10 @@ public class Flywheel extends SubsystemBase {
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(24 / 30))
             .withSlot0(
                 new Slot0Configs()
-                    .withKP(1.1)
+                    .withKP(1.4)
                     .withKI(0)
                     .withKD(0)
-                    .withKS(0.8)
+                    .withKS(0.6)
                     .withKV(0.00)
                     .withKA(0));
     motor.withConfig(config).withPIDTunable(config.Slot0);
