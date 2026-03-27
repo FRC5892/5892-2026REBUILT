@@ -10,8 +10,13 @@ package frc.robot.util;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusCode;
+
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
 import java.util.function.Supplier;
+
+import org.ironmaple.simulation.SimulatedArena;
 
 public class PhoenixUtil {
 
@@ -67,4 +72,16 @@ public class PhoenixUtil {
   }
 
   private static final double CONNECTED_LATENCY_S = 0.500; // Phoenix default
+
+
+      public static double[] getSimulationOdometryTimeStamps() {
+        final double[] odometryTimeStamps = new double[SimulatedArena.getSimulationSubTicksIn1Period()];
+        for (int i = 0; i < odometryTimeStamps.length; i++) {
+            odometryTimeStamps[i] = Timer.getFPGATimestamp()
+                    - 0.02
+                    + i * SimulatedArena.getSimulationDt().in(Units.Seconds);
+        }
+
+        return odometryTimeStamps;
+    }
 }
