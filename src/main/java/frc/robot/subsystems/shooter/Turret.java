@@ -87,7 +87,7 @@ public class Turret extends SubsystemBase {
    * limit MaxPercent/MinPercent: DigitalInput/TurretPot/Value at each limit
    */
   private final LoggedTunableMeasure<MutAngle> potRange =
-      new LoggedTunableMeasure<MutAngle>("Turret/Pot/Range", Degrees.mutable(507.657624688));
+      new LoggedTunableMeasure<MutAngle>("Turret/Pot/Range", Degrees.mutable(503.944174757));
 
   private final LoggedTunableMeasure<MutAngle> wrapWarningThreshold =
       new LoggedTunableMeasure<>("Turret/WrapWarningThreshold", Degrees.mutable(10));
