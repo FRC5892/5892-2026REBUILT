@@ -22,7 +22,7 @@ public class Intake extends SubsystemBase {
   private final LoggedTalonFX rollerMotor;
   private final LoggedTalonFX slapDownMotor;
   private final LoggedTunableNumber rollerSpeed =
-      new LoggedTunableNumber("Intake/RollerSpeed", 0.5);
+      new LoggedTunableNumber("Intake/RollerSpeed", 0.9);
   private final LoggedTunableMeasure<MutAngle> outPosition =
       new LoggedTunableMeasure<>("Intake/OutPosition", Rotation.mutable(0.49));
   private final LoggedTunableMeasure<MutAngle> holdPosition =

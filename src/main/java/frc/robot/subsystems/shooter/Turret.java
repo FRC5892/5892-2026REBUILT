@@ -94,7 +94,7 @@ public class Turret extends SubsystemBase {
 
   /** Difference between Turret 0 and robot forward. This needs to be fairly precise */
   private final LoggedTunableMeasure<MutAngle> offset =
-      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(59));
+      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(49));
 
   private final LoggedTunableMeasure<MutAngle> staticPose =
       new LoggedTunableMeasure<MutAngle>("Turret/StaticPose", Degrees.mutable(0));
