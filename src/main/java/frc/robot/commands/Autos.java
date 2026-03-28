@@ -27,7 +27,7 @@ import org.littletonrobotics.junction.Logger;
 /** Add your docs here. */
 public class Autos {
 
-public static Command leftAuto(Intake intake, Indexer indexer, Shooter shooter) {
+  public static Command leftAuto(Intake intake, Indexer indexer, Shooter shooter) {
     try {
       final ArrayList<PathPoint> points;
       if (Constants.currentMode == Constants.Mode.SIM) {

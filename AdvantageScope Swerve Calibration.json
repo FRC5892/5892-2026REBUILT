@@ -1,47 +1,314 @@
 {
   "hubs": [
     {
-      "x": 139,
-      "y": 95,
-      "width": 1100,
-      "height": 650,
+      "x": -8,
+      "y": -8,
+      "width": 1382,
+      "height": 736,
       "state": {
         "sidebar": {
-          "width": 300,
+          "width": 365,
           "expanded": [
-            "/Drive",
+            "/Tuning/IntakeSlap",
+            "/Tuning/Drive/JoystickLock",
+            "/RealOutputs/Odometry/Robot",
+            "/SystemStats/CANBus",
+            "/Motors/Turret/Connected",
+            "/Tuning/Turret/Pot",
+            "/RealOutputs/Turret/VisibleSetpoint/rotation",
+            "/RealOutputs/Turret/VisibleSetpoint/rotation/q",
+            "/Motors/Turret/AppliedVolts",
+            "/Motors/Hood/Connected",
+            "/Vision/Camera0",
+            "/NetworkInputs/Tuning",
+            "/Motors/Flywheel/Connected",
+            "/Motors/Flywheel/TorqueCurrentAmps",
+            "/DriverStation/Joystick0/AxisValues",
+            "/Tuning/simInput",
+            "/Vision/Camera0/TagIds",
+            "/Vision/Camera1",
+            "/back",
+            "/AdvantageKit",
+            "/AdvantageKit/Vision",
+            "/AdvantageKit/Vision/Camera0",
+            "/AdvantageKit/Vision/Camera1",
+            "/RealOutputs/Vision/Offsets",
+            "/Vision/Camera2",
+            "/RealOutputs/ShotCalculator/LatestShot",
+            "/Motors/Hood/TorqueCurrentAmps",
+            "/Motors/Turret/TorqueCurrentAmps",
+            "/Tuning",
+            "/Motors/IntakeSlapDown/TorqueCurrentAmps",
+            "/Motors/IntakeSlapDown/SupplyCurrentAmps",
+            "/RealOutputs/ShotCalculator/Target",
+            "/Motors/IntakeRoller/TorqueCurrentAmps",
+            "/Motors/IntakeRoller/SupplyCurrentAmps",
+            "/ReplayOutputs/SwerveStates",
+            "/Drive/Module0",
+            "/Drive/Module0/TurnPosition",
+            "/Drive/Module0/TurnAbsolutePosition",
+            "/RealOutputs/Vision/Summary",
+            "/RealOutputs/ShotCalculator/LatestShot/hoodAngle",
+            "/ReplayOutputs",
+            "/ReplayOutputs/ShotCalculator",
+            "/ReplayOutputs/ShotCalculator/LatestShot",
+            "/ReplayOutputs/ShotCalculator/LatestShot/hoodAngle",
+            "/NetworkInputs/SmartDashboard",
+            "/Motors/IntakeRoller/Connected",
+            "/NetworkInputs/Tuning/Flywheel",
+            "/Motors/Spindexer/AppliedVolts",
+            "/Motors/Spindexer/TorqueCurrentAmps",
+            "/Motors/Rollers/TorqueCurrentAmps",
+            "/Motors/Flywheel/TemperatureC",
+            "/Motors/Turret",
+            "/DigitalInput/TurretPot",
             "/RealOutputs",
-            "/RealOutputs/SwerveStates",
-            "/RealOutputs/SwerveChassisSpeeds",
-            "/RealOutputs/Odometry"
+            "/Tuning/Flywheel",
+            "/Tuning/Intake",
+            "/Vision",
+            "/Vision/Camera0/PoseObservations",
+            "/DigitalInput",
+            "/Tuning/Turret",
+            "/Tuning/IntakeSlapDown",
+            "/RealOutputs/Odometry",
+            "/RealOutputs/Vision"
           ]
         },
         "tabs": {
-          "selected": 1,
+          "selected": 7,
           "tabs": [
             {
               "type": 0,
               "title": "",
               "controller": null,
-              "controllerUUID": "grimvlgu9aluj8btvwotco2wpj0pto2h",
+              "controllerUUID": "ls3xpgxv2gggr30g414jdua2stcjnvcc",
               "renderer": "",
               "controlsHeight": 0
             },
             {
-              "type": 9,
-              "title": "Drive Overview",
+              "type": 1,
+              "title": "Temp",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/Hood/TargetPosition",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/Hood/TorqueCurrentAmps/0",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "discreteSources": [],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "rightUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "vvacjxpnp40od58mo3iupnoii5ofdpb9",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 1,
+              "title": "Shot Calculator",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/ShotCalculator/TurretToTargetDistance",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/ShotCalculator/LatestShot/flywheelSpeedRotPerSec",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/ReplayOutputs/ShotCalculator/LatestShot/flywheelSpeedRotPerSec",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#80588e",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/ShotCalculator/LatestShot/hoodAngle/value",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#af2437",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/ReplayOutputs/ShotCalculator/LatestShot/hoodAngle/value",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e48b32",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "discreteSources": [
+                  {
+                    "type": "stripes",
+                    "logKey": "/DriverStation/Enabled",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#c0b487"
+                    }
+                  }
+                ],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "autoTarget": null,
+                  "preset": {
+                    "type": null,
+                    "factor": 1
+                  }
+                },
+                "rightUnitConversion": {
+                  "autoTarget": "degrees",
+                  "preset": null
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "3lvqzlg71bp9v83it2t6yeelbvhysog5",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 3,
+              "title": "Master Field",
               "controller": {
                 "sources": [
                   {
-                    "type": "states",
-                    "logKey": "/RealOutputs/SwerveStates/Measured",
-                    "logType": "SwerveModuleState[]",
+                    "type": "robot",
+                    "logKey": "/RealOutputs/Odometry/Robot",
+                    "logType": "Pose2d",
                     "visible": true,
                     "options": {
-                      "color": "#ff0000",
-                      "arrangement": "0,1,2,3"
+                      "model": "2026 KitBot"
                     }
                   },
+                  {
+                    "type": "vision",
+                    "logKey": "/RealOutputs/Vision/Summary/TagPoses",
+                    "logType": "Pose3d[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#00ff00",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "/RealOutputs/ShotCalculator/Target",
+                    "logType": "Pose2d",
+                    "visible": false,
+                    "options": {
+                      "model": "2026 KitBot",
+                      "color": "#00ff00"
+                    }
+                  },
+                  {
+                    "type": "cone",
+                    "logKey": "/RealOutputs/Turret/VisibleSetpoint",
+                    "logType": "Pose3d",
+                    "visible": false,
+                    "options": {
+                      "color": "#ff0000",
+                      "position": "center"
+                    }
+                  },
+                  {
+                    "type": "ghost",
+                    "logKey": "/RealOutputs/ShotCalculator/LookaheadPose",
+                    "logType": "Pose2d",
+                    "visible": false,
+                    "options": {
+                      "model": "KitBot",
+                      "color": "#00ff00"
+                    }
+                  },
+                  {
+                    "type": "trajectory",
+                    "logKey": "/RealOutputs/Odometry/Trajectory",
+                    "logType": "Pose2d[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#00ff00",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "game": "FRC:2026 Field"
+              },
+              "controllerUUID": "iyvdhucmiwxtqshy7h6t2pum93dl265t",
+              "renderer": {
+                "cameraIndex": -1,
+                "orbitFov": 50,
+                "cameraPosition": [
+                  -6.459732782089754,
+                  15.200165864560445,
+                  -5.366600988781063
+                ],
+                "cameraTarget": [
+                  -2.448065815399992,
+                  -14.56430452331434,
+                  5.184710966888278
+                ]
+              },
+              "controlsHeight": 200
+            },
+            {
+              "type": 9,
+              "title": "Swerve",
+              "controller": {
+                "sources": [
                   {
                     "type": "states",
                     "logKey": "/RealOutputs/SwerveStates/SetpointsOptimized",
@@ -49,6 +316,16 @@
                     "visible": true,
                     "options": {
                       "color": "#00ffff",
+                      "arrangement": "0,1,2,3"
+                    }
+                  },
+                  {
+                    "type": "states",
+                    "logKey": "/RealOutputs/SwerveStates/Measured",
+                    "logType": "SwerveModuleState[]",
+                    "visible": true,
+                    "options": {
+                      "color": "#ff8c00",
                       "arrangement": "0,1,2,3"
                     }
                   },
@@ -65,17 +342,50 @@
                     "type": "chassisSpeeds",
                     "logKey": "/RealOutputs/SwerveChassisSpeeds/Setpoints",
                     "logType": "ChassisSpeeds",
-                    "visible": true,
+                    "visible": false,
                     "options": {
                       "color": "#00ffff"
                     }
                   },
                   {
-                    "type": "rotation",
-                    "logKey": "/RealOutputs/Odometry/Robot/rotation",
-                    "logType": "Rotation2d",
+                    "type": "states",
+                    "logKey": "/ReplayOutputs/SwerveStates/SetpointsUnDesaturated",
+                    "logType": "SwerveModuleState[]",
+                    "visible": false,
+                    "options": {
+                      "color": "#0000ff",
+                      "arrangement": "0,1,2,3"
+                    }
+                  },
+                  {
+                    "type": "states",
+                    "logKey": "/ReplayOutputs/SwerveStates/Setpoints",
+                    "logType": "SwerveModuleState[]",
+                    "visible": false,
+                    "options": {
+                      "color": "#00ff00",
+                      "arrangement": "0,1,2,3"
+                    }
+                  },
+                  {
+                    "type": "states",
+                    "logKey": "/RealOutputs/SwerveStates/Setpoints",
+                    "logType": "SwerveModuleState[]",
                     "visible": true,
-                    "options": {}
+                    "options": {
+                      "color": "#ff0000",
+                      "arrangement": "0,1,2,3"
+                    }
+                  },
+                  {
+                    "type": "states",
+                    "logKey": "/RealOutputs/SwerveStates/SetpointsOptimized",
+                    "logType": "SwerveModuleState[]",
+                    "visible": false,
+                    "options": {
+                      "color": "#00ffff",
+                      "arrangement": "0,1,2,3"
+                    }
                   }
                 ],
                 "maxSpeed": 5,
@@ -83,72 +393,78 @@
                 "sizeY": 0.65,
                 "orientation": 1
               },
-              "controllerUUID": "prdx7t2eedan6n46dxrjfu7eisf16f9o",
+              "controllerUUID": "srs09kwagadkqj586mg1ujqg0ng6zrtt",
               "renderer": null,
               "controlsHeight": 200
             },
             {
-              "type": 3,
-              "title": "Field",
+              "type": 2,
+              "title": "2D Field",
               "controller": {
                 "sources": [
+                  {
+                    "type": "robot",
+                    "logKey": "/RealOutputs/ShotCalculator/Target",
+                    "logType": "Pose2d",
+                    "visible": true,
+                    "options": {
+                      "bumpers": ""
+                    }
+                  },
                   {
                     "type": "robot",
                     "logKey": "/RealOutputs/Odometry/Robot",
                     "logType": "Pose2d",
                     "visible": true,
                     "options": {
-                      "model": "Crab Bot"
+                      "bumpers": ""
                     }
                   },
                   {
-                    "type": "trajectory",
-                    "logKey": "/RealOutputs/Odometry/Trajectory",
-                    "logType": "Pose2d[]",
+                    "type": "arrow",
+                    "logKey": "/RealOutputs/Turret/VisibleSetpoint",
+                    "logType": "Pose3d",
                     "visible": true,
                     "options": {
-                      "color": "#ff8c00",
-                      "size": "normal"
+                      "position": "center"
                     }
                   },
                   {
                     "type": "ghost",
-                    "logKey": "/RealOutputs/Odometry/TrajectorySetpoint",
+                    "logKey": "/RealOutputs/ShotCalculator/LookaheadPose",
                     "logType": "Pose2d",
                     "visible": true,
                     "options": {
-                      "model": "Crab Bot",
-                      "color": "#ff8c00"
+                      "color": "#00ff00"
                     }
                   }
                 ],
-                "game": ""
+                "field": "FRC:2026 Field",
+                "orientation": 3,
+                "size": "medium"
               },
-              "controllerUUID": "psf0y633oclnjyocus23hcnq1d4tpyte",
-              "renderer": {
-                "cameraIndex": -1,
-                "orbitFov": 50,
-                "cameraPosition": [
-                  1.4695761589768238e-15,
-                  5.999999999999999,
-                  -12
-                ],
-                "cameraTarget": [
-                  0,
-                  0.5,
-                  0
-                ]
-              },
-              "controlsHeight": 200
+              "controllerUUID": "1yw1x5vusz86yuuk08l1fjq8ndk3j0fu",
+              "renderer": null,
+              "controlsHeight": 197
             },
             {
               "type": 1,
-              "title": "Turn Calibration",
+              "title": "Performance",
               "controller": {
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module0/TurnPosition/value",
+                    "logKey": "/RealOutputs/LoggedRobot/UserCodeMS",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/LoggedRobot/FullCycleMS",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -158,9 +474,204 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module1/TurnPosition/value",
+                    "logKey": "/RealOutputs/LoggedRobot/GCTimeMS",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#af2437",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [],
+                "discreteSources": [],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "rightUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "pu82upfqi1dqv63w17chlgozgtrlsoyl",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 1,
+              "title": "Turret PID",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/Turret/PositionRot",
                     "logType": "Number",
                     "visible": true,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/Turret/PotPose",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/Turret/Target",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#af2437",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/DigitalInput/TurretPot/Value",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#3b875a",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/ShotCalculator/LatestShot/turretAngle/value",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#858584",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/Turret/VelocityRotPS",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#e48b32",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/Turret/TorqueCurrentAmps/0",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#c0b487",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "discreteSources": [
+                  {
+                    "type": "stripes",
+                    "logKey": "/RealOutputs/Turret/PositionControl",
+                    "logType": "Boolean",
+                    "visible": false,
+                    "options": {
+                      "color": "#80588e"
+                    }
+                  },
+                  {
+                    "type": "stripes",
+                    "logKey": "/DriverStation/Enabled",
+                    "logType": "Boolean",
+                    "visible": false,
+                    "options": {
+                      "color": "#d993aa"
+                    }
+                  }
+                ],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "autoTarget": "degrees",
+                  "preset": null
+                },
+                "rightUnitConversion": {
+                  "autoTarget": null,
+                  "preset": {
+                    "type": null,
+                    "factor": 1
+                  }
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "tvjld69s9wvt1pqxyogl87cseom94vbg",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 1,
+              "title": "Line Graph",
+              "controller": {
+                "leftSources": [],
+                "rightSources": [],
+                "discreteSources": [
+                  {
+                    "type": "alerts",
+                    "logKey": "/RealOutputs/Alerts",
+                    "logType": "Alerts",
+                    "visible": true,
+                    "options": {}
+                  }
+                ],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "rightUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "rdz2oey68ces4ar3zgl83qtkk5v4gjoi",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 1,
+              "title": "Hood",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/Hood/Angle",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/Hood/TargetPosition",
+                    "logType": "Number",
+                    "visible": false,
                     "options": {
                       "color": "#af2437",
                       "size": "normal"
@@ -168,7 +679,19 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module2/TurnPosition/value",
+                    "logKey": "/Motors/Hood/PositionRot",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/ShotCalculator/LatestShot/hoodAngle/value",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -178,52 +701,61 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module3/TurnPosition/value",
+                    "logKey": "/Motors/Hood/TorqueCurrentAmps/0",
                     "logType": "Number",
                     "visible": true,
                     "options": {
                       "color": "#e48b32",
                       "size": "normal"
                     }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/Hood/VelocityRotPS",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#858584",
+                      "size": "normal"
+                    }
                   }
                 ],
-                "rightSources": [],
-                "discreteSources": [],
+                "discreteSources": [
+                  {
+                    "type": "stripes",
+                    "logKey": "/DriverStation/Enabled",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#c0b487"
+                    }
+                  }
+                ],
                 "leftLockedRange": null,
                 "rightLockedRange": null,
                 "leftUnitConversion": {
-                  "autoTarget": null,
+                  "autoTarget": "degrees",
                   "preset": null
                 },
                 "rightUnitConversion": {
-                  "autoTarget": null,
+                  "autoTarget": "degrees",
                   "preset": null
                 },
                 "leftFilter": 0,
                 "rightFilter": 0
               },
-              "controllerUUID": "ol8lk80m83ma3aegae849d6k1d29sp7d",
+              "controllerUUID": "0dwyiw2k133khzeoed2w9pro7e220qcl",
               "renderer": null,
               "controlsHeight": 200
             },
             {
               "type": 1,
-              "title": "Drive Calibration",
+              "title": "Intake Roller",
               "controller": {
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module0/DrivePositionRad",
-                    "logType": "Number",
-                    "visible": true,
-                    "options": {
-                      "color": "#e5b31b",
-                      "size": "normal"
-                    }
-                  },
-                  {
-                    "type": "stepped",
-                    "logKey": "/Drive/Module1/DrivePositionRad",
+                    "logKey": "/Motors/IntakeRoller/VelocityRotPS",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -233,27 +765,206 @@
                   },
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module2/DrivePositionRad",
+                    "logKey": "/DriverStation/MatchTime",
                     "logType": "Number",
-                    "visible": true,
+                    "visible": false,
                     "options": {
-                      "color": "#80588e",
+                      "color": "#c0b487",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "rightSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/IntakeRoller/TorqueCurrentAmps/0",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#2b66a2",
                       "size": "normal"
                     }
                   },
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module3/DrivePositionRad",
+                    "logKey": "/Motors/IntakeRoller/SupplyCurrentAmps/0",
                     "logType": "Number",
                     "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "discreteSources": [
+                  {
+                    "type": "stripes",
+                    "logKey": "/DriverStation/Enabled",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#80588e"
+                    }
+                  },
+                  {
+                    "type": "stripes",
+                    "logKey": "/DriverStation/GameSpecificMessage",
+                    "logType": "String",
+                    "visible": false,
+                    "options": {
+                      "color": "#e48b32"
+                    }
+                  }
+                ],
+                "leftLockedRange": null,
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "rightUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "ftnl25hosadyi65muqe08521rqgbj9ik",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 1,
+              "title": "Flywheel",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/Flywheel/VelocityRotPS",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/ShotCalculator/LatestShot/flywheelSpeedRotPerSec",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/Flywheel/TorqueCurrentAmps/1",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#c0b487",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/NetworkInputs/Tuning/Flywheel/staticSpeed",
+                    "logType": "Number",
+                    "visible": false,
                     "options": {
                       "color": "#e48b32",
                       "size": "normal"
                     }
                   }
                 ],
+                "rightSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/RealOutputs/ShotCalculator/TurretToTargetDistance",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#af2437",
+                      "size": "normal"
+                    }
+                  }
+                ],
+                "discreteSources": [
+                  {
+                    "type": "stripes",
+                    "logKey": "/DriverStation/Enabled",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#80588e"
+                    }
+                  }
+                ],
+                "leftLockedRange": [
+                  -1,
+                  105
+                ],
+                "rightLockedRange": null,
+                "leftUnitConversion": {
+                  "autoTarget": null,
+                  "preset": null
+                },
+                "rightUnitConversion": {
+                  "autoTarget": null,
+                  "preset": {
+                    "type": "length",
+                    "factor": 1,
+                    "from": "meters",
+                    "to": "feet"
+                  }
+                },
+                "leftFilter": 0,
+                "rightFilter": 0
+              },
+              "controllerUUID": "sovtoid0vuah77p461j770vm27cbk7ju",
+              "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 1,
+              "title": "Kicker",
+              "controller": {
+                "leftSources": [
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/Kicker/VelocityRotPS",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Tuning/Kicker/SpeedRotPerSec",
+                    "logType": "Number",
+                    "visible": true,
+                    "options": {
+                      "color": "#2b66a2",
+                      "size": "normal"
+                    }
+                  }
+                ],
                 "rightSources": [],
-                "discreteSources": [],
+                "discreteSources": [
+                  {
+                    "type": "stripes",
+                    "logKey": "/DriverStation/Enabled",
+                    "logType": "Boolean",
+                    "visible": true,
+                    "options": {
+                      "color": "#af2437"
+                    }
+                  }
+                ],
                 "leftLockedRange": null,
                 "rightLockedRange": null,
                 "leftUnitConversion": {
@@ -267,28 +978,18 @@
                 "leftFilter": 0,
                 "rightFilter": 0
               },
-              "controllerUUID": "7jj1f83nsv59dd2ou11ls3ccz5tq1293",
+              "controllerUUID": "dvfgmfx16d8wi0zulp0csvct64h10ll5",
               "renderer": null,
               "controlsHeight": 200
             },
             {
               "type": 1,
-              "title": "Turn PID Tuning",
+              "title": "Indexer",
               "controller": {
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "/RealOutputs/SwerveStates/Measured/0/angle/value",
-                    "logType": "Number",
-                    "visible": true,
-                    "options": {
-                      "color": "#2b66a2",
-                      "size": "normal"
-                    }
-                  },
-                  {
-                    "type": "stepped",
-                    "logKey": "/RealOutputs/SwerveStates/SetpointsOptimized/0/angle/value",
+                    "logKey": "/Motors/Spindexer/TorqueCurrentAmps/0",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -297,98 +998,38 @@
                     }
                   }
                 ],
-                "rightSources": [],
-                "discreteSources": [],
-                "leftLockedRange": null,
-                "rightLockedRange": null,
-                "leftUnitConversion": {
-                  "autoTarget": null,
-                  "preset": null
-                },
-                "rightUnitConversion": {
-                  "autoTarget": null,
-                  "preset": null
-                },
-                "leftFilter": 0,
-                "rightFilter": 0
-              },
-              "controllerUUID": "kj6tf6sxm5g04wnjrhed6mx2wpccmqtn",
-              "renderer": null,
-              "controlsHeight": 200
-            },
-            {
-              "type": 1,
-              "title": "Drive PID Tuning",
-              "controller": {
-                "leftSources": [
+                "rightSources": [
                   {
                     "type": "stepped",
-                    "logKey": "/RealOutputs/SwerveStates/Measured/0/speed",
+                    "logKey": "/Motors/Rollers/TorqueCurrentAmps/0",
                     "logType": "Number",
                     "visible": true,
                     "options": {
-                      "color": "#2b66a2",
-                      "size": "normal"
-                    }
-                  },
-                  {
-                    "type": "stepped",
-                    "logKey": "/RealOutputs/SwerveStates/SetpointsOptimized/0/speed",
-                    "logType": "Number",
-                    "visible": true,
-                    "options": {
-                      "color": "#e5b31b",
+                      "color": "#af2437",
                       "size": "normal"
                     }
                   }
                 ],
-                "rightSources": [],
-                "discreteSources": [],
-                "leftLockedRange": null,
-                "rightLockedRange": null,
-                "leftUnitConversion": {
-                  "autoTarget": null,
-                  "preset": null
-                },
-                "rightUnitConversion": {
-                  "autoTarget": null,
-                  "preset": null
-                },
-                "leftFilter": 0,
-                "rightFilter": 0
-              },
-              "controllerUUID": "bctxg9pmwpo31m9bv9ofr92oqqtbpqzp",
-              "renderer": null,
-              "controlsHeight": 200
-            },
-            {
-              "type": 1,
-              "title": "Max Speed Measurement",
-              "controller": {
-                "leftSources": [
+                "discreteSources": [
                   {
-                    "type": "stepped",
-                    "logKey": "/RealOutputs/SwerveChassisSpeeds/Measured/vx",
-                    "logType": "Number",
+                    "type": "stripes",
+                    "logKey": "/DriverStation/Enabled",
+                    "logType": "Boolean",
                     "visible": true,
                     "options": {
-                      "color": "#2b66a2",
-                      "size": "normal"
+                      "color": "#2b66a2"
                     }
                   },
                   {
-                    "type": "stepped",
-                    "logKey": "/RealOutputs/SwerveChassisSpeeds/Measured/vy",
-                    "logType": "Number",
+                    "type": "stripes",
+                    "logKey": "/ReplayOutputs/Shooting",
+                    "logType": "Boolean",
                     "visible": true,
                     "options": {
-                      "color": "#e5b31b",
-                      "size": "normal"
+                      "color": "#80588e"
                     }
                   }
                 ],
-                "rightSources": [],
-                "discreteSources": [],
                 "leftLockedRange": null,
                 "rightLockedRange": null,
                 "leftUnitConversion": {
@@ -402,18 +1043,18 @@
                 "leftFilter": 0,
                 "rightFilter": 0
               },
-              "controllerUUID": "oy3vmjuhr7g36evikwnmjhfacl30mzn5",
+              "controllerUUID": "t0a4pphen674n1h9oyegpjpaimtoquhn",
               "renderer": null,
               "controlsHeight": 200
             },
             {
               "type": 1,
-              "title": "Slip Current Measurement",
+              "title": "Intake Slap Down",
               "controller": {
                 "leftSources": [
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module0/DriveCurrentAmps",
+                    "logKey": "/Motors/IntakeSlapDown/PositionRot",
                     "logType": "Number",
                     "visible": true,
                     "options": {
@@ -425,11 +1066,21 @@
                 "rightSources": [
                   {
                     "type": "stepped",
-                    "logKey": "/Drive/Module0/DriveVelocityRadPerSec",
+                    "logKey": "/Motors/IntakeSlapDown/TorqueCurrentAmps/0",
                     "logType": "Number",
-                    "visible": true,
+                    "visible": false,
                     "options": {
                       "color": "#e5b31b",
+                      "size": "normal"
+                    }
+                  },
+                  {
+                    "type": "stepped",
+                    "logKey": "/Motors/IntakeSlapDown/SupplyCurrentAmps/0",
+                    "logType": "Number",
+                    "visible": false,
+                    "options": {
+                      "color": "#af2437",
                       "size": "normal"
                     }
                   }
@@ -438,7 +1089,7 @@
                 "leftLockedRange": null,
                 "rightLockedRange": null,
                 "leftUnitConversion": {
-                  "autoTarget": null,
+                  "autoTarget": "rotations",
                   "preset": null
                 },
                 "rightUnitConversion": {
@@ -448,8 +1099,64 @@
                 "leftFilter": 0,
                 "rightFilter": 0
               },
-              "controllerUUID": "efudylbvebbv1ga2kosknov0uegmtj7h",
+              "controllerUUID": "gok3mls2wfe6slhhyoqew8h5vlo1dmem",
               "renderer": null,
+              "controlsHeight": 200
+            },
+            {
+              "type": 5,
+              "title": "Console",
+              "controller": "/RealOutputs/Console",
+              "controllerUUID": "xqzzq8lfyqbgt5c31mkls6ncsx20ozpw",
+              "renderer": {
+                "highlight": false
+              },
+              "controlsHeight": 0
+            },
+            {
+              "type": 3,
+              "title": "Cameras",
+              "controller": {
+                "sources": [
+                  {
+                    "type": "axes",
+                    "logKey": "/RealOutputs/Vision/Offsets/back",
+                    "logType": "Transform3d",
+                    "visible": true,
+                    "options": {}
+                  },
+                  {
+                    "type": "axes",
+                    "logKey": "/RealOutputs/Vision/Offsets/left",
+                    "logType": "Transform3d",
+                    "visible": true,
+                    "options": {}
+                  },
+                  {
+                    "type": "axes",
+                    "logKey": "/RealOutputs/Vision/Offsets/right",
+                    "logType": "Transform3d",
+                    "visible": true,
+                    "options": {}
+                  }
+                ],
+                "game": "FRC:Axes"
+              },
+              "controllerUUID": "8i5vks5600whzh0wudvixfgj56nk15qa",
+              "renderer": {
+                "cameraIndex": -1,
+                "orbitFov": 50,
+                "cameraPosition": [
+                  -8.512285766642123,
+                  1.7774574691036018,
+                  3.8674755857370293
+                ],
+                "cameraTarget": [
+                  -8.21449484832051,
+                  -3.4808603213779192,
+                  4.131326329998391
+                ]
+              },
               "controlsHeight": 200
             }
           ]
