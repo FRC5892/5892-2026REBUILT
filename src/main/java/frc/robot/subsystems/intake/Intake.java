@@ -22,17 +22,21 @@ public class Intake extends SubsystemBase {
   private final LoggedTalonFX rollerMotor;
   private final LoggedTalonFX slapDownMotor;
   private final LoggedTunableNumber rollerSpeed =
-      new LoggedTunableNumber("Intake/RollerSpeed", 0.9);
+      new LoggedTunableNumber("IntakeRoller/Speed", 0.9, "%");
+  private final LoggedTunableNumber unjamThreshold =
+      new LoggedTunableNumber("IntakeRoller/UnjamThreshold", 100, "amp");
+  private final LoggedTunableNumber unjamSpeed =
+      new LoggedTunableNumber("IntakeRoller/UnjamSpeed", -0.2, "%");
   private final LoggedTunableMeasure<MutAngle> outPosition =
-      new LoggedTunableMeasure<>("Intake/OutPosition", Rotation.mutable(0.49));
+      new LoggedTunableMeasure<>("IntakeSlap/OutPosition", Rotation.mutable(0.49));
   private final LoggedTunableMeasure<MutAngle> holdPosition =
-      new LoggedTunableMeasure<>("Intake/HoldPosition", Rotation.mutable(0.32));
+      new LoggedTunableMeasure<>("IntakeSlap/HoldPosition", Rotation.mutable(0.32));
   private final LoggedTunableNumber extendOuttakeSpeed =
-      new LoggedTunableNumber("Intake/ExtendOuttakeSpeed", -0.1);
+      new LoggedTunableNumber("IntakeRoller/ExtendOuttakeSpeed", -0.1);
   private final LoggedTunableMeasure<MutAngle> inPosition =
-      new LoggedTunableMeasure<>("Intake/InPosition", Rotation.mutable(0.02));
+      new LoggedTunableMeasure<>("IntakeSlap/InPosition", Rotation.mutable(0.02));
   private final LoggedTunableMeasure<MutAngle> tolerance =
-      new LoggedTunableMeasure<>("Intake/Tolerance", Rotation.mutable(0.05));
+      new LoggedTunableMeasure<>("IntakeSlap/Tolerance", Rotation.mutable(0.05));
 
   private final DutyCycleOut dutyCycleOut = new DutyCycleOut(rollerSpeed.get()).withEnableFOC(true);
   private final MotionMagicDutyCycle mmOut = new MotionMagicDutyCycle(0);
@@ -54,8 +58,13 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeCommand() {
-    return startEnd(
-        () -> rollerMotor.setControl(dutyCycleOut.withOutput(rollerSpeed.get())),
+    return runEnd(
+        () ->
+            rollerMotor.setControl(
+                dutyCycleOut.withOutput(
+                    rollerMotor.getPrimaryTorqueCurrentAmps() > unjamThreshold.get()
+                        ? unjamSpeed.get()
+                        : rollerSpeed.get())),
         () -> rollerMotor.setControl(dutyCycleOut.withOutput(0)));
   }
 
