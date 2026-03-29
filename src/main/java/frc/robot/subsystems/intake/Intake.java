@@ -62,9 +62,8 @@ public class Intake extends SubsystemBase {
         () ->
             rollerMotor.setControl(
                 dutyCycleOut.withOutput(
-                    rollerMotor.getPrimaryTorqueCurrentAmps() > unjamThreshold.get()
-                        ? unjamSpeed.get()
-                        : rollerSpeed.get())),
+                    // rollerMotor.getPrimaryTorqueCurrentAmps() > unjamThreshold.get() ? unjamSpeed.get() :
+                      rollerSpeed.get())),
         () -> rollerMotor.setControl(dutyCycleOut.withOutput(0)));
   }
 
