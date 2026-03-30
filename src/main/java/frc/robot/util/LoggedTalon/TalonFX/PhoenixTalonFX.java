@@ -81,6 +81,8 @@ public class PhoenixTalonFX extends LoggedTalonFX {
     PhoenixUtil.registerSignals(canBus, voltageSignal);
     PhoenixUtil.registerSignals(canBus, torqueCurrentSignal);
     PhoenixUtil.registerSignals(canBus, supplyCurrentSignal);
+    PhoenixUtil.registerSignals(canBus, temperatureSignal);
+
     PhoenixUtil.registerSignals(canBus, velocitySignal, positionSignal);
   }
 

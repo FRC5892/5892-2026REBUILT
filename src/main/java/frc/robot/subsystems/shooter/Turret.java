@@ -77,7 +77,7 @@ public class Turret extends SubsystemBase {
    * degrees) at each turret limit
    */
   private final LoggedTunableMeasure<MutAngle> pot0Pose =
-      new LoggedTunableMeasure<MutAngle>("Turret/Pot/0Pose", Degrees.mutable(247.5));
+      new LoggedTunableMeasure<MutAngle>("Turret/Pot/0Pose", Degrees.mutable(206.885272));
 
   /**
    * Range of the Potentiometer: | MaxRotation - MinRotation | ----------------------------- |
@@ -87,14 +87,14 @@ public class Turret extends SubsystemBase {
    * limit MaxPercent/MinPercent: DigitalInput/TurretPot/Value at each limit
    */
   private final LoggedTunableMeasure<MutAngle> potRange =
-      new LoggedTunableMeasure<MutAngle>("Turret/Pot/Range", Degrees.mutable(503.944174757));
+      new LoggedTunableMeasure<MutAngle>("Turret/Pot/Range", Degrees.mutable(422.057991062));
 
   private final LoggedTunableMeasure<MutAngle> wrapWarningThreshold =
       new LoggedTunableMeasure<>("Turret/WrapWarningThreshold", Degrees.mutable(10));
 
   /** Difference between Turret 0 and robot forward. This needs to be fairly precise */
   private final LoggedTunableMeasure<MutAngle> offset =
-      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(59));
+      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(65));
 
   private final LoggedTunableMeasure<MutAngle> staticPose =
       new LoggedTunableMeasure<MutAngle>("Turret/StaticPose", Degrees.mutable(0));

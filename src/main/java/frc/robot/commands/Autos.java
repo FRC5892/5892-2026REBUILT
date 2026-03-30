@@ -43,11 +43,9 @@ public class Autos {
                       AutoBuilder.followPath(loadPath("Left_Path_Start", points)),
                       AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
                   intake.intakeSequence(),
-                  Commands.sequence(
-                      shooter.getHood().stowCommand().withTimeout(1),
-                      ShootCommands.shoot(indexer, shooter, Goal.LEFT))),
+                  shooter.getHood().stowCommand()),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(5)),
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Left_Path", points)),
@@ -55,16 +53,16 @@ public class Autos {
                   intake.intakeSequence(),
                   shooter.getHood().stowCommand()),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(5)));
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
-            "Autos/Left Auto", points.stream().map(m -> m.position).toArray(Translation2d[]::new));
+            "Autos/LeftAuto", points.stream().map(m -> m.position).toArray(Translation2d[]::new));
       }
       return auto;
     } catch (Exception e) {
       @SuppressWarnings("resource")
-      Alert alert = new Alert("Failed to load leftCenter Auto", AlertType.kError);
+      Alert alert = new Alert("Failed to load Left Auto", AlertType.kError);
       alert.set(true);
       DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
       return Commands.none();
@@ -89,7 +87,9 @@ public class Autos {
                   intake.intakeSequence(),
                   shooter.getHood().stowCommand()),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
+                  Commands.sequence(
+                      Commands.waitSeconds(1), ShootCommands.shoot(indexer, shooter, Goal.HUB)),
+                  Commands.waitSeconds(7)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Right_Path", points)),

@@ -84,9 +84,9 @@ public class ShotCalculator {
     // M vs RPS
     // shotFlywheelSpeedMap.put(Units.feetToMeters(6 + 2), 61.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(8 + 2), 65.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(10 + 2), 74.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(12 + 2), 79.0);
-    shotFlywheelSpeedMap.put(Units.feetToMeters(16 + 2), 98.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(10 + 2), 72.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(12 + 2), 75.0);
+    shotFlywheelSpeedMap.put(Units.feetToMeters(16 + 2), 92.0);
 
     // TODO: Untuned M vs S
     timeOfFlightMap.put(5.68, 1.16);
