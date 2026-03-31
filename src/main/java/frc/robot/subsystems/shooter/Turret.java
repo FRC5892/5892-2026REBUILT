@@ -147,7 +147,6 @@ public class Turret extends SubsystemBase {
     // secondary: 10:110, 11:1
     // total: 44:1
     motor.withConfig(config).withMMPIDTuning(SlotConfigs.from(config.Slot0), config.MotionMagic);
-    setDefaultCommand(aimCommand());
     if (Constants.tuningMode) {
       // This command directly sets the turret position to 0. It really should never
       // be used ever
