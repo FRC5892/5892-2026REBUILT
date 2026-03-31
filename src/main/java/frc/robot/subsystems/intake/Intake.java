@@ -51,7 +51,7 @@ public class Intake extends SubsystemBase {
                 new MotionMagicConfigs()
                     .withMotionMagicAcceleration(5)
                     .withMotionMagicCruiseVelocity(8))
-            .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(23 * (36 / 24)));
+            .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(23 * (36.0 / 24.0)));
     this.slapDownMotor = slapDownMotor.withConfig(slapDownConfig).withMMPIDTuning(slapDownConfig);
 
     // setDefaultCommand(retractForeverCommand());
