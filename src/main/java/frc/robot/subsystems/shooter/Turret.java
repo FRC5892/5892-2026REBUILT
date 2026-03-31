@@ -33,7 +33,6 @@ import frc.robot.RobotState;
 import frc.robot.util.LoggedAnalogInput.LoggedAnalogInput;
 import frc.robot.util.LoggedAnalogInput.SimAnalogInput;
 import frc.robot.util.LoggedDIO.LoggedDIO;
-import frc.robot.util.LoggedDIO.SimDIO;
 import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import frc.robot.util.LoggedTunableMeasure;
 import frc.robot.util.LoggedTunableNumber;
@@ -196,7 +195,8 @@ public class Turret extends SubsystemBase {
               if (!i) {
                 setHomed(true);
               }
-            });
+            })
+        .onlyIf(() -> !estopFlag.get());
   }
 
   public void updateFromAbsolute() {
