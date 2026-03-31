@@ -25,14 +25,13 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants;
 import frc.robot.RobotState;
 import frc.robot.util.LoggedAnalogInput.LoggedAnalogInput;
+import frc.robot.util.LoggedAnalogInput.SimAnalogInput;
 import frc.robot.util.LoggedDIO.LoggedDIO;
 import frc.robot.util.LoggedDIO.SimDIO;
 import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
@@ -51,7 +50,6 @@ public class Turret extends SubsystemBase {
   /* Hardware */
   private final LoggedTalonFX motor;
   private final LoggedDIO reverseLimit;
-  private final LoggedDIO forwardLimit;
   private final LoggedAnalogInput pot;
 
   /* Movement Constants */
@@ -106,7 +104,7 @@ public class Turret extends SubsystemBase {
   private final MutAngle targetPosition = Degrees.mutable(0);
   @AutoLogOutput private final MutAngle potPose = Degrees.mutable(0);
   private boolean positionControl = false;
-  @Setter private boolean homed = false;
+  @Getter @Setter private boolean homed = false;
   @Getter private boolean atSetpoint = false;
 
   private final LoggedNetworkBoolean estopFlag =
@@ -121,13 +119,10 @@ public class Turret extends SubsystemBase {
 
   private final Translation3d turretVisual = new Translation3d(0, 0, Units.inchesToMeters(20));
 
-  public Turret(
-      LoggedTalonFX motor, LoggedDIO reverseLimit, LoggedDIO forwardLimit, LoggedAnalogInput pot) {
+  public Turret(LoggedTalonFX motor, LoggedDIO reverseLimit, LoggedAnalogInput pot) {
     this.motor = motor;
-    // TODO: Remove limits
-    this.reverseLimit = new SimDIO("Turret/ReverseLimit", () -> false);
-    this.forwardLimit = new SimDIO("Turret/ForwardLimit", () -> false);
-    this.pot = pot.withAverageBits(256);
+    this.reverseLimit = reverseLimit.withReversed(true);
+    this.pot = new SimAnalogInput("Turret/Pot", () -> 0.0);
 
     var config =
         new TalonFXConfiguration()
@@ -156,12 +151,9 @@ public class Turret extends SubsystemBase {
     }
     // Preload so AdvantageKit can process logging stuff before the match starts.
     ShotCalculator.getInstance().calculateShot();
-
-    RobotModeTriggers.disabled().onTrue(updateFromAbsoluteCommand());
+    // Home if not already homed
+    RobotModeTriggers.disabled().negate().and(() -> !this.isHomed()).onTrue(homingCommand());
     setDefaultCommand(aimCommand());
-    updateFromAbsolute();
-    CommandScheduler.getInstance()
-        .schedule(Commands.waitSeconds(0.1).andThen(updateFromAbsoluteCommand()));
   }
 
   public Command aimCommand() {
@@ -274,7 +266,6 @@ public class Turret extends SubsystemBase {
   public final void periodic() {
     motor.periodic();
     reverseLimit.periodic();
-    forwardLimit.periodic();
     pot.periodic();
 
     potPose.mut_setBaseUnitMagnitude(
@@ -308,10 +299,7 @@ public class Turret extends SubsystemBase {
     if (positionControl) {
       Logger.recordOutput("Turret/Target", targetPosition.in(Rotation), "rot");
       motor.setControl(
-          mmControl
-              .withPosition(targetPosition)
-              .withLimitReverseMotion(reverseLimit.get())
-              .withLimitForwardMotion(forwardLimit.get()));
+          mmControl.withPosition(targetPosition).withLimitReverseMotion(reverseLimit.get()));
     }
   }
 }

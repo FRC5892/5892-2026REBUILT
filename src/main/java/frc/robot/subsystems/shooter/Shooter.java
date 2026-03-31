@@ -44,7 +44,6 @@ public class Shooter {
             new Turret(
                 new PhoenixTalonFX(28, bus, "Turret"),
                 new HardwareDIO("TurretReverse", 2),
-                new HardwareDIO("TurretForward", 3),
                 new HardwareAnalogInput("TurretPot", 0));
       }
       case SIM -> {
@@ -62,7 +61,6 @@ public class Shooter {
             new Turret(
                 new TalonFXSimpleMotorSim(28, bus, "Turret", 0.0307668163, 1.25),
                 SimDIO.fromNT("TurretReverse"),
-                SimDIO.fromNT("TurretForward"),
                 SimAnalogInput.fromNT("TurretPot"));
       }
       default -> {
@@ -72,7 +70,6 @@ public class Shooter {
             new Turret(
                 new NoOppTalonFX("Turret", 0),
                 new NoOppDio("TurretReverse"),
-                new NoOppDio("TurretForward"),
                 new NoOppAnalogInput("TurretPot"));
       }
     }
