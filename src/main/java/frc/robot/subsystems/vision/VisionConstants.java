@@ -31,21 +31,21 @@ public class VisionConstants {
   public static Transform3d robotToCameraBack =
       new Transform3d(
           Units.inchesToMeters(-13.4375),
-          Units.inchesToMeters(1 + 1 / 8),
-          Units.inchesToMeters(15 + (9 / 16)),
+          Units.inchesToMeters(1 + 1 / 8.0),
+          Units.inchesToMeters(15 + (9 / 16.0)),
           new Rotation3d(0.0, 0, Units.degreesToRadians(180)));
   public static Transform3d robotToCameraLeft =
       new Transform3d(
-          Units.inchesToMeters((-27.5 / 2) /* frame edge */ + (3 + (1 / 4)) /* in */),
-          Units.inchesToMeters((27.5 / 2) /* frame edge */ - (2 + (9 / 16)) /* in */),
+          Units.inchesToMeters((-27.5 / 2.0) /* frame edge */ + (3 + (1 / 4.0)) /* in */),
+          Units.inchesToMeters((27.5 / 2.0) /* frame edge */ - (2 + (9 / 16.0)) /* in */),
           Units.inchesToMeters(7 + (15 / 16) /* up */),
           new Rotation3d(
               0.0, Units.degreesToRadians(-23.05 /* pitch up */), Units.degreesToRadians(90)));
   public static Transform3d robotToCameraRight =
       new Transform3d(
-          Units.inchesToMeters((-27 / 2) + (2 / 10)),
-          Units.inchesToMeters((-27 / 2) + 8 + (1 / 2)),
-          Units.inchesToMeters(6 + (7 / 16) + 1 + (5 / 8)),
+          Units.inchesToMeters((-27 / 2.0) + (2 / 10.0)),
+          Units.inchesToMeters((-27 / 2.0) + 8 + (1 / 2.0)),
+          Units.inchesToMeters(6 + (7 / 16.0) + 1 + (5 / 8.0)),
           new Rotation3d(0.0, Units.degreesToRadians(-3.9), Units.degreesToRadians(-90)));
 
   static {
