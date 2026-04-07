@@ -44,7 +44,7 @@ public class MechanismUtil {
       Supplier<Angle> confirmPosition) {
     VoltageOut out = new VoltageOut(0);
     NeutralOut neutral = new NeutralOut();
-    Runnable towardPeriodic =
+    Runnable periodic =
         forward
             ? () -> talon.setControl(out.withLimitForwardMotion(limitSwitch.get()))
             : () -> talon.setControl(out.withLimitReverseMotion(limitSwitch.get()));
@@ -52,9 +52,9 @@ public class MechanismUtil {
         new FunctionalCommand(
             () -> {
               out.withOutput(initialVoltage.getAsDouble() * (forward ? 1 : -1));
-              towardPeriodic.run();
+              periodic.run();
             },
-            towardPeriodic,
+            periodic,
             // Only set the position if we are done homing and confirm is not wanted
             confirmVoltage.getAsDouble() == 0
                 ? (interrupted) -> {
@@ -69,19 +69,15 @@ public class MechanismUtil {
             limitSwitch,
             subsystem);
     if (confirmVoltage.getAsDouble() != 0) {
-      Runnable awayPeriodic =
-          forward
-              ? () -> talon.setControl(out.withLimitReverseMotion(limitSwitch.get()))
-              : () -> talon.setControl(out.withLimitForwardMotion(limitSwitch.get()));
       command =
           command.andThen(
               // Now away from stop
               new FunctionalCommand(
                   () -> {
-                    out.withOutput(confirmVoltage.getAsDouble() * (forward ? -1 : 1));
-                    awayPeriodic.run();
+                    out.withOutput(initialVoltage.getAsDouble() * (forward ? -1 : 1));
+                    periodic.run();
                   },
-                  awayPeriodic,
+                  periodic,
                   (interrupted) -> talon.setControl(neutral),
                   forward
                       ? () -> talon.getPosition().lte(confirmPosition.get())
@@ -91,9 +87,9 @@ public class MechanismUtil {
               new FunctionalCommand(
                   () -> {
                     out.withOutput(confirmVoltage.getAsDouble() * (forward ? 1 : -1));
-                    towardPeriodic.run();
+                    periodic.run();
                   },
-                  towardPeriodic,
+                  periodic,
                   (interrupted) -> {
                     talon.setControl(neutral);
                     if (!interrupted) {

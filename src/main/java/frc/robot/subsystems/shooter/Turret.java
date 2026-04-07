@@ -48,7 +48,7 @@ public class Turret extends SubsystemBase {
 
   /* Hardware */
   private final LoggedTalonFX motor;
-  private final LoggedDIO reverseLimit;
+  private final LoggedDIO forwardLimit;
   private final LoggedAnalogInput pot;
 
   /* Movement Constants */
@@ -58,13 +58,13 @@ public class Turret extends SubsystemBase {
       new LoggedTunableMeasure<MutAngle>("Turret/MaxAngle", Degrees.mutable(205));
   /* Homing */
   private final LoggedTunableNumber homingVoltage =
-      new LoggedTunableNumber("Turret/Homing/Voltage", 4, "v");
+      new LoggedTunableNumber("Turret/Homing/Voltage", 1.5, "v");
   private final LoggedTunableNumber homingConfirmationVoltage =
-      new LoggedTunableNumber("Turret/Homing/ConfirmVoltage", 4, "v");
+      new LoggedTunableNumber("Turret/Homing/ConfirmVoltage", 0.5, "v");
   private final LoggedTunableMeasure<MutAngle> homingSwitchPosition =
-      new LoggedTunableMeasure<>("Turret/Homing/HomePosition", Degrees.mutable(0));
+      new LoggedTunableMeasure<>("Turret/Homing/HomePosition", Degrees.mutable(205));
   private final LoggedTunableMeasure<MutAngle> homingConfirmPosition =
-      new LoggedTunableMeasure<>("Turret/Homing/ConfirmPosition", Degrees.mutable(0.1));
+      new LoggedTunableMeasure<>("Turret/Homing/ConfirmPosition", Degrees.mutable(195));
   private final LoggedTunableMeasure<MutAngle> tolerance =
       new LoggedTunableMeasure<>("Turret/Tolerance", Degrees.mutable(5));
 
@@ -115,12 +115,13 @@ public class Turret extends SubsystemBase {
       new LoggedNetworkBoolean("SmartDashboard/TurretStatic", false);
 
   private Angle holdOffset = null;
+  private final CurrentLimitsConfigs currentConfig;
 
   private final Translation3d turretVisual = new Translation3d(0, 0, Units.inchesToMeters(20));
 
   public Turret(LoggedTalonFX motor, LoggedDIO reverseLimit, LoggedAnalogInput pot) {
     this.motor = motor;
-    this.reverseLimit = reverseLimit.withReversed(true);
+    this.forwardLimit = reverseLimit.withReversed(false);
     this.pot = new SimAnalogInput("Turret/Pot", () -> 0.0);
 
     var config =
@@ -135,8 +136,9 @@ public class Turret extends SubsystemBase {
                 new MotorOutputConfigs()
                     .withNeutralMode(NeutralModeValue.Brake)
                     .withInverted(InvertedValue.CounterClockwise_Positive))
-            .withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(60))
+            .withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(20))
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(44));
+    this.currentConfig = config.CurrentLimits;
     // primary: 12:48, 4:1
     // secondary: 10:110, 11:1
     // total: 44:1
@@ -146,6 +148,7 @@ public class Turret extends SubsystemBase {
       // be used ever
       // ever
       SmartDashboard.putData("Turret/ForceZero", forceZero());
+      SmartDashboard.putData("Turret/UnHome", runOnce(() -> setHomed(false)));
     }
     // Preload so AdvantageKit can process logging stuff before the match starts.
     ShotCalculator.getInstance().calculateShot();
@@ -170,6 +173,10 @@ public class Turret extends SubsystemBase {
             return;
           }
           holdOffset = null;
+          if (staticFlag.get()) {
+            this.requestPosition(staticPose.get());
+            return;
+          }
           this.requestPosition(
               Radians.of(
                   MathUtil.angleModulus(
@@ -182,19 +189,24 @@ public class Turret extends SubsystemBase {
   public Command homingCommand() {
     return MechanismUtil.buildHomingCommand(
             motor,
-            reverseLimit,
+            forwardLimit,
             this,
             homingVoltage,
-            false,
+            true,
             homingSwitchPosition::get,
             homingConfirmationVoltage::get,
             homingConfirmPosition::get)
-        .beforeStarting(() -> positionControl = false)
+        .beforeStarting(
+            () -> {
+              positionControl = false;
+              motor.quickApplyConfig(this.currentConfig.clone().withStatorCurrentLimit(10));
+            })
         .finallyDo(
             (i) -> {
               if (!i) {
                 setHomed(true);
               }
+              motor.quickApplyConfig(this.currentConfig);
             })
         .onlyIf(() -> !estopFlag.get());
   }
@@ -264,7 +276,7 @@ public class Turret extends SubsystemBase {
   @Override
   public final void periodic() {
     motor.periodic();
-    reverseLimit.periodic();
+    forwardLimit.periodic();
     pot.periodic();
 
     potPose.mut_setBaseUnitMagnitude(
@@ -298,7 +310,7 @@ public class Turret extends SubsystemBase {
     if (positionControl) {
       Logger.recordOutput("Turret/Target", targetPosition.in(Rotation), "rot");
       motor.setControl(
-          mmControl.withPosition(targetPosition).withLimitReverseMotion(reverseLimit.get()));
+          mmControl.withPosition(targetPosition).withLimitForwardMotion(forwardLimit.get()));
     }
   }
 }

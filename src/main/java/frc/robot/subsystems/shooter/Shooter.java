@@ -43,7 +43,7 @@ public class Shooter {
         turret =
             new Turret(
                 new PhoenixTalonFX(28, bus, "Turret"),
-                new HardwareDIO("TurretReverse", 2),
+                new HardwareDIO("TurretLimit", 9),
                 new HardwareAnalogInput("TurretPot", 0));
       }
       case SIM -> {

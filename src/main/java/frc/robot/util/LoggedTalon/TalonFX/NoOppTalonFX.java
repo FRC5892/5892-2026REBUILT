@@ -1,5 +1,6 @@
 package frc.robot.util.LoggedTalon.TalonFX;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -122,4 +123,8 @@ public class NoOppTalonFX extends LoggedTalonFX {
    */
   @Override
   public void quickApplyConfig(TalonFXConfiguration config) {}
+
+  @Override
+  /** {@inheritDoc} */
+  public void quickApplyConfig(CurrentLimitsConfigs config) {}
 }

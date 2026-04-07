@@ -3,6 +3,7 @@ package frc.robot.util.LoggedTalon.TalonFX;
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -140,6 +141,12 @@ public class PhoenixTalonFX extends LoggedTalonFX {
   /** {@inheritDoc} */
   @Override
   public void quickApplyConfig(MotionMagicConfigs config) {
+    PhoenixUtil.tryUntilOk(3, () -> talonFX[0].getConfigurator().apply(config));
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  public void quickApplyConfig(CurrentLimitsConfigs config) {
     PhoenixUtil.tryUntilOk(3, () -> talonFX[0].getConfigurator().apply(config));
   }
 

@@ -2,6 +2,7 @@ package frc.robot.util.LoggedTalon;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -379,6 +380,13 @@ public abstract class LoggedTalon<T extends LoggedTalon<T>> {
    * @param config The config to apply
    */
   public abstract void quickApplyConfig(SlotConfigs config);
+
+  /**
+   * Update SlotConfigs in a timely manner. This function is designed to be used for or testing
+   *
+   * @param config The config to apply
+   */
+  public abstract void quickApplyConfig(CurrentLimitsConfigs config);
 
   /**
    * Update MotionMagicConfigs in a timely manner. This function is designed to be used for tuning,
