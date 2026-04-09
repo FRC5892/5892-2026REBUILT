@@ -28,7 +28,7 @@ public class Intake extends SubsystemBase {
   private final LoggedTunableNumber unjamSpeed =
       new LoggedTunableNumber("IntakeRoller/UnjamSpeed", -0.2, "%");
   private final LoggedTunableMeasure<MutAngle> outPosition =
-      new LoggedTunableMeasure<>("IntakeSlap/OutPosition", Rotation.mutable(0.49));
+      new LoggedTunableMeasure<>("IntakeSlap/OutPosition", Rotation.mutable(0.29));
   private final LoggedTunableMeasure<MutAngle> holdPosition =
       new LoggedTunableMeasure<>("IntakeSlap/HoldPosition", Rotation.mutable(0.32));
   private final LoggedTunableNumber extendOuttakeSpeed =
