@@ -21,6 +21,8 @@ import frc.robot.RobotState;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.FieldConstants;
 import frc.robot.util.FieldConstants.LinesHorizontal;
+import frc.robot.util.LoggedTunableNumber;
+import java.util.function.DoubleSupplier;
 import lombok.RequiredArgsConstructor;
 import org.littletonrobotics.junction.Logger;
 
@@ -61,7 +63,7 @@ public class ShotCalculator {
 
   private static final double minDistance;
   private static final double maxDistance;
-  private static final double phaseDelay;
+  private static final DoubleSupplier phaseDelay;
   private static final InterpolatingTreeMap<Double, Rotation2d> shotHoodAngleMap =
       new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
   private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap =
@@ -69,21 +71,21 @@ public class ShotCalculator {
   private static final InterpolatingDoubleTreeMap timeOfFlightMap =
       new InterpolatingDoubleTreeMap();
 
+  private static final LoggedTunableNumber distanceOffsetM =
+      new LoggedTunableNumber("ShotCalculator/DistanceOffsetM", 0.0);
+
   static {
     minDistance = Units.feetToMeters(2 + 2);
     maxDistance = Units.feetToMeters(7 + 2);
-    phaseDelay = 0.03; // TODO: untuned
+    phaseDelay = new LoggedTunableNumber("ShotCalculator/PhaseDelayS", 0.03);
     // These are in degrees from verical
     // shotHoodAngleMap.put(Units.feetToMeters(6 + 2), Rotation2d.fromDegrees(42.0));
     shotHoodAngleMap.put(Units.feetToMeters(5), Rotation2d.fromDegrees(28.0));
     shotHoodAngleMap.put(Units.feetToMeters(7), Rotation2d.fromDegrees(28.0));
     shotHoodAngleMap.put(Units.feetToMeters(9), Rotation2d.fromDegrees(28.0));
     shotHoodAngleMap.put(Units.feetToMeters(10.2), Rotation2d.fromDegrees(28.0));
-
     shotHoodAngleMap.put(Units.feetToMeters(11.5), Rotation2d.fromDegrees(40.0));
-
-    shotHoodAngleMap.put(
-        Units.feetToMeters(13.8), Rotation2d.fromDegrees(40.0)); // 147.5 x, 132 y =
+    shotHoodAngleMap.put(Units.feetToMeters(13.8), Rotation2d.fromDegrees(40.0));
 
     // M vs RPS
     // shotFlywheelSpeedMap.put(Units.feetToMeters(6 + 2), 61.0);
@@ -91,17 +93,14 @@ public class ShotCalculator {
     shotFlywheelSpeedMap.put(Units.feetToMeters(5.385166), 67.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(7.3), 76.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(10.2), 85.0);
-
     shotFlywheelSpeedMap.put(Units.feetToMeters(11.5), 83.0);
-    // shotFlywheelSpeedMap.put(Units.feetToMeters(13.7), 85.0);
     shotFlywheelSpeedMap.put(Units.feetToMeters(13.4), 87.0);
 
-    // TODO: Untuned M vs S
-    timeOfFlightMap.put(5.68, 1.16);
-    timeOfFlightMap.put(4.55, 1.12);
-    timeOfFlightMap.put(3.15, 1.11);
-    timeOfFlightMap.put(1.88, 1.09);
-    timeOfFlightMap.put(1.38, 0.90);
+    // M vs S
+    timeOfFlightMap.put(Units.feetToMeters(10 + 2), 1.38);
+    timeOfFlightMap.put(Units.feetToMeters(12 + 2), 1.6);
+    timeOfFlightMap.put(Units.feetToMeters(16 + 2), 1.7);
+    timeOfFlightMap.put(Units.feetToMeters(18 + 2), 1.765);
   }
 
   public ShotParameters calculateShot() {
@@ -117,9 +116,9 @@ public class ShotCalculator {
     estimatedPose =
         estimatedPose.exp(
             new Twist2d(
-                robotRelativeVelocity.vxMetersPerSecond * phaseDelay,
-                robotRelativeVelocity.vyMetersPerSecond * phaseDelay,
-                robotRelativeVelocity.omegaRadiansPerSecond * phaseDelay));
+                robotRelativeVelocity.vxMetersPerSecond * phaseDelay.getAsDouble(),
+                robotRelativeVelocity.vyMetersPerSecond * phaseDelay.getAsDouble(),
+                robotRelativeVelocity.omegaRadiansPerSecond * phaseDelay.getAsDouble()));
 
     // Calculate distance from turret to target
     Translation2d target = AllianceFlipUtil.apply(RobotState.getInstance().updateGoal().pose);
@@ -158,14 +157,14 @@ public class ShotCalculator {
     // Calculate parameters accounted for imparted velocity
     turretAngle =
         target.minus(lookaheadPose.getTranslation()).getAngle().minus(lookaheadPose.getRotation());
-    hoodAngle = shotHoodAngleMap.get(lookaheadTurretToTargetDistance);
+    hoodAngle = shotHoodAngleMap.get(lookaheadTurretToTargetDistance + distanceOffsetM.get());
     latestShot =
         new ShotParameters(
             lookaheadTurretToTargetDistance >= minDistance
                 && lookaheadTurretToTargetDistance <= maxDistance,
             turretAngle,
             hoodAngle,
-            shotFlywheelSpeedMap.get(lookaheadTurretToTargetDistance));
+            shotFlywheelSpeedMap.get(lookaheadTurretToTargetDistance + distanceOffsetM.get()));
 
     // Log calculated values
     Logger.recordOutput("ShotCalculator/LatestShot", latestShot);
