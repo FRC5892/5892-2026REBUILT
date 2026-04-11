@@ -28,7 +28,7 @@ public class Flywheel extends SubsystemBase {
   private final LoggedTunableMeasure<MutAngularVelocity> tolerance =
       new LoggedTunableMeasure<>("Flywheel/Tolerance", RotationsPerSecond.mutable(5));
   private final LoggedTunableMeasure<MutAngularVelocity> staticSpeed =
-      new LoggedTunableMeasure<>("Flywheel/staticSpeed", RotationsPerSecond.mutable(60));
+      new LoggedTunableMeasure<>("Flywheel/staticSpeed", RotationsPerSecond.mutable(70));
 
   private final LoggedNetworkBoolean estopFlag =
       new LoggedNetworkBoolean("SmartDashboard/FlywheelEStop", false);
@@ -48,10 +48,10 @@ public class Flywheel extends SubsystemBase {
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(24.0 / 30.0))
             .withSlot0(
                 new Slot0Configs()
-                    .withKP(1.4)
+                    .withKP(2.5)
                     .withKI(0)
-                    .withKD(0)
-                    .withKS(0.6)
+                    .withKD(0.4)
+                    .withKS(1.4)
                     .withKV(0.00)
                     .withKA(0));
     motor.withConfig(config).withPIDTunable(config.Slot0);

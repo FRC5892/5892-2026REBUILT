@@ -13,6 +13,7 @@ import static frc.robot.subsystems.vision.VisionConstants.cameraLeftName;
 import static frc.robot.subsystems.vision.VisionConstants.cameraRightName;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -38,6 +39,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionConstants;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.util.LoggedTalon.Follower.PhoenixTalonFollower;
 import frc.robot.util.LoggedTalon.TalonFX.NoOppTalonFX;
 import frc.robot.util.LoggedTalon.TalonFX.PhoenixTalonFX;
 import frc.robot.util.LoggedTalon.TalonFX.TalonFXSimpleMotorSim;
@@ -94,7 +96,11 @@ public class RobotContainer {
                 new VisionIOPhotonVision(cameraRightName, VisionConstants.robotToCameraRight));
         intake =
             new Intake(
-                new PhoenixTalonFX(30, rioCAN, "IntakeRoller"),
+                new PhoenixTalonFX(
+                    30,
+                    rioCAN,
+                    "IntakeRoller",
+                    new PhoenixTalonFollower(32, MotorAlignmentValue.Opposed)),
                 new PhoenixTalonFX(31, rioCAN, "IntakeSlapDown"));
         break;
 
@@ -123,7 +129,13 @@ public class RobotContainer {
         //     new VisionIOPhotonVisionSim(camera1Name, robotToCamera1, drive::getPose));
         intake =
             new Intake(
-                new TalonFXSimpleMotorSim(30, rioCAN, "IntakeRoller", 1, 1),
+                new TalonFXSimpleMotorSim(
+                    30,
+                    rioCAN,
+                    "IntakeRoller",
+                    1,
+                    1,
+                    new PhoenixTalonFollower(32, MotorAlignmentValue.Opposed)),
                 new TalonFXSimpleMotorSim(31, rioCAN, "IntakeSlap", 1, 1));
         break;
 
@@ -143,7 +155,7 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {});
 
-        intake = new Intake(new NoOppTalonFX("IntakeRoller", 0), new NoOppTalonFX("IntakeSlap", 0));
+        intake = new Intake(new NoOppTalonFX("IntakeRoller", 1), new NoOppTalonFX("IntakeSlap", 0));
         break;
     }
     indexer = new Indexer(rioCAN);

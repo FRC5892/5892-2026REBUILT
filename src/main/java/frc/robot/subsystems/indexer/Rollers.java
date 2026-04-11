@@ -12,7 +12,7 @@ public class Rollers extends RollerSubsystem {
   public Rollers(LoggedTalonFX motor, LoggedDIO beambreak) {
     super(
         motor.withConfig(LoggedTalonFX.buildStandardConfig(40, 40, NeutralModeValue.Brake)),
-        new LoggedTunableNumber("Rollers/Speed", -0.65),
+        new LoggedTunableNumber("Rollers/Speed", -0.5),
         new LoggedTunableNumber("Rollers/UnjamSpeed", 0.25));
     this.beambreak = beambreak.withReversed(true);
   }

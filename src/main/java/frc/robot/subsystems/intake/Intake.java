@@ -12,8 +12,10 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import edu.wpi.first.units.measure.MutAngle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
 import frc.robot.util.LoggedTunableMeasure;
 import frc.robot.util.LoggedTunableNumber;
@@ -28,9 +30,9 @@ public class Intake extends SubsystemBase {
   private final LoggedTunableNumber unjamSpeed =
       new LoggedTunableNumber("IntakeRoller/UnjamSpeed", -0.2, "%");
   private final LoggedTunableMeasure<MutAngle> outPosition =
-      new LoggedTunableMeasure<>("IntakeSlap/OutPosition", Rotation.mutable(0.29));
+      new LoggedTunableMeasure<>("IntakeSlap/OutPosition", Rotation.mutable(0.34));
   private final LoggedTunableMeasure<MutAngle> holdPosition =
-      new LoggedTunableMeasure<>("IntakeSlap/HoldPosition", Rotation.mutable(0.32));
+      new LoggedTunableMeasure<>("IntakeSlap/HoldPosition", Rotation.mutable(0.18));
   private final LoggedTunableNumber extendOuttakeSpeed =
       new LoggedTunableNumber("IntakeRoller/ExtendOuttakeSpeed", -0.1);
   private final LoggedTunableMeasure<MutAngle> inPosition =
@@ -43,9 +45,9 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new Intake. */
   public Intake(LoggedTalonFX rollerMotor, LoggedTalonFX slapDownMotor) {
-    this.rollerMotor = rollerMotor.withConfig(LoggedTalonFX.buildStandardConfig(160, 60));
+    this.rollerMotor = rollerMotor.withConfig(LoggedTalonFX.buildStandardConfig(60, 40));
     var slapDownConfig =
-        LoggedTalonFX.buildStandardConfig(80, 4020)
+        LoggedTalonFX.buildStandardConfig(80, 40)
             .withSlot0(new Slot0Configs().withKP(10).withKI(0).withKD(0).withKS(0).withKV(0))
             .withMotionMagic(
                 new MotionMagicConfigs()
@@ -53,6 +55,10 @@ public class Intake extends SubsystemBase {
                     .withMotionMagicCruiseVelocity(8))
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(23 * (36.0 / 24.0)));
     this.slapDownMotor = slapDownMotor.withConfig(slapDownConfig).withMMPIDTuning(slapDownConfig);
+    if (Constants.tuningMode) {
+      SmartDashboard.putData(
+          "Intake/Zero", runOnce(() -> slapDownMotor.setPosition(Rotation.of(0))));
+    }
 
     // setDefaultCommand(retractForeverCommand());
   }
