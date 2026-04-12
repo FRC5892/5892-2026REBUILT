@@ -75,10 +75,6 @@ public class Shooter {
     }
   }
 
-  public ParallelCommandGroup homeCommand() {
-    return new ParallelCommandGroup(hood.homingCommand(), turret.updateFromAbsoluteCommand());
-  }
-
   public ParallelCommandGroup tuneCommand(DoubleSupplier speed, DoubleSupplier angle) {
     var command =
         new ParallelCommandGroup(

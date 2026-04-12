@@ -97,10 +97,10 @@ public class RobotContainer {
         intake =
             new Intake(
                 new PhoenixTalonFX(
-                    30,
+                    32,
                     rioCAN,
                     "IntakeRoller",
-                    new PhoenixTalonFollower(32, MotorAlignmentValue.Opposed)),
+                    new PhoenixTalonFollower(30, MotorAlignmentValue.Opposed)),
                 new PhoenixTalonFX(31, rioCAN, "IntakeSlapDown"));
         break;
 
@@ -242,7 +242,11 @@ public class RobotContainer {
     driveController
         .start()
         .or(coDriveController.start())
-        .whileTrue(shooter.homeCommand()); // 8, right middle button, home
+        .onTrue(
+            shooter
+                .getHood()
+                .homingCommand()
+                .alongWith(shooter.getTurret().homingCommand())); // 8, right middle button, home
     driveController
         .back()
         .or(coDriveController.back())
@@ -310,7 +314,10 @@ public class RobotContainer {
               shooter.tuneCommand(
                   new LoggedNetworkNumber("/Tuning/SpeedRPS", 0),
                   new LoggedNetworkNumber("/Tuning/HoodAngle", 18.575)));
-      testController.start().whileTrue(shooter.homeCommand());
+      testController
+          .start()
+          .whileTrue(
+              shooter.getHood().homingCommand().alongWith(shooter.getTurret().homingCommand()));
     }
   }
 

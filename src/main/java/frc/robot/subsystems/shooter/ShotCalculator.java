@@ -77,7 +77,7 @@ public class ShotCalculator {
   static {
     minDistance = Units.feetToMeters(2 + 2);
     maxDistance = Units.feetToMeters(7 + 2);
-    phaseDelay = new LoggedTunableNumber("ShotCalculator/PhaseDelayS", 0.03);
+    phaseDelay = new LoggedTunableNumber("ShotCalculator/PhaseDelayS", 0.06);
     // These are in degrees from verical
     // shotHoodAngleMap.put(Units.feetToMeters(6 + 2), Rotation2d.fromDegrees(42.0));
     shotHoodAngleMap.put(Units.feetToMeters(5), Rotation2d.fromDegrees(28.0));

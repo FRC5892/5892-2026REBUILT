@@ -72,7 +72,9 @@ public class PhoenixTalonFX extends LoggedTalonFX {
           torqueCurrentSignal[i],
           supplyCurrentSignal[i],
           temperatureSignal[i]);
-      talonFX[i].optimizeBusUtilization(PhoenixUtil.kOptimizedSignalFrequency);
+      if (talonFX.length == 1) {
+        talonFX[i].optimizeBusUtilization(PhoenixUtil.kOptimizedSignalFrequency);
+      }
     }
     velocitySignal = talonFX[0].getVelocity();
     positionSignal = talonFX[0].getPosition();
@@ -116,7 +118,9 @@ public class PhoenixTalonFX extends LoggedTalonFX {
   /** {@inheritDoc} */
   @Override
   public LoggedTalonFX withConfig(TalonFXConfiguration config) {
-    PhoenixUtil.tryUntilOk(5, () -> talonFX[0].getConfigurator().apply(config));
+    for (TalonFX talon : talonFX) {
+      PhoenixUtil.tryUntilOk(5, () -> talon.getConfigurator().apply(config));
+    }
     return this;
   }
 

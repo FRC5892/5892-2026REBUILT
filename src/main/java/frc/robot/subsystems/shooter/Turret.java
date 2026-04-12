@@ -126,11 +126,10 @@ public class Turret extends SubsystemBase {
 
     var config =
         new TalonFXConfiguration()
-            .withSlot0(
-                new Slot0Configs().withKP(10).withKI(0).withKD(0).withKS(0.018).withKV(0.085))
+            .withSlot0(new Slot0Configs().withKP(6).withKI(0).withKD(0).withKS(0.018).withKV(0.085))
             .withMotionMagic(
                 new MotionMagicConfigs()
-                    .withMotionMagicCruiseVelocity(1)
+                    .withMotionMagicCruiseVelocity(2)
                     .withMotionMagicAcceleration(20))
             .withMotorOutput(
                 new MotorOutputConfigs()
