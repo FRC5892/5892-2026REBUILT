@@ -44,6 +44,7 @@ public class Autos {
                       AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
                   intake.intakeSequence(),
                   shooter.getHood().stowCommand()),
+              shooter.getTurret().homingCommand(),
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
               Commands.race(
