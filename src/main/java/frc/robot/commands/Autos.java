@@ -122,7 +122,10 @@ public class Autos {
   }
 
   public static Command preload(Indexer indexer, Shooter shooter) {
-    return ShootCommands.shoot(indexer, shooter).withTimeout(7);
+    return shooter
+        .getTurret()
+        .homingCommand()
+        .andThen(ShootCommands.shoot(indexer, shooter).withTimeout(7));
   }
 
   public static PathPlannerPath loadPath(String name, List<PathPoint> points)
