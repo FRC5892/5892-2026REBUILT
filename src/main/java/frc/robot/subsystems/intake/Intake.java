@@ -132,7 +132,7 @@ public class Intake extends SubsystemBase {
    */
   public Command extendOnly() {
     return startRun(() -> slapDownMotor.setControl(mmOut.withPosition(outPosition.get())), () -> {})
-        .until(() -> slapDownMotor.atSetpoint(holdPosition.get(), tolerance.get()));
+        .until(() -> slapDownMotor.atSetpoint(outPosition.get(), tolerance.get()));
   }
 
   public Command oscillate() {
