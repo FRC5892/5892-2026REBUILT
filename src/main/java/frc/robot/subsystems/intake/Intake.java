@@ -74,6 +74,12 @@ public class Intake extends SubsystemBase {
         () -> rollerMotor.setControl(dutyCycleOut.withOutput(0)));
   }
 
+  /**
+   * Extend until setpoint, then retract?? TODO: Stop using this function
+   *
+   * @return
+   */
+  @Deprecated
   public Command extendCommand() {
     return startEnd(
             () -> {
@@ -101,9 +107,31 @@ public class Intake extends SubsystemBase {
     return extendCommand().andThen(intakeCommand());
   }
 
+  /**
+   * Hold at 45 forever TODO: Stop using this function
+   *
+   * @return
+   */
+  @Deprecated
   public Command hold() {
     return startRun(
         () -> slapDownMotor.setControl(mmOut.withPosition(holdPosition.get())), () -> {});
+  }
+
+  public Command halfWay() {
+    return startRun(
+            () -> slapDownMotor.setControl(mmOut.withPosition(holdPosition.get())), () -> {})
+        .until(() -> slapDownMotor.atSetpoint(holdPosition.get(), tolerance.get()));
+  }
+
+  /**
+   * Extend until setpoint is achieved
+   *
+   * @return
+   */
+  public Command extendOnly() {
+    return startRun(() -> slapDownMotor.setControl(mmOut.withPosition(outPosition.get())), () -> {})
+        .until(() -> slapDownMotor.atSetpoint(holdPosition.get(), tolerance.get()));
   }
 
   @Override
