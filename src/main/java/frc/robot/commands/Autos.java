@@ -47,7 +47,7 @@ public class Autos {
               shooter.getTurret().homingCommand(),
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB),
-                  Commands.repeatingSequence(intake.extendOnly(), intake.halfWay()),
+                  intake.oscillate(),
                   Commands.waitSeconds(5)),
               Commands.race(
                   Commands.sequence(
@@ -57,7 +57,7 @@ public class Autos {
                   shooter.getHood().stowCommand()),
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB),
-                  Commands.repeatingSequence(intake.extendOnly(), intake.halfWay()),
+                  intake.oscillate(),
                   Commands.waitSeconds(5)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
@@ -94,7 +94,7 @@ public class Autos {
               shooter.getTurret().homingCommand(),
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB),
-                  Commands.repeatingSequence(intake.extendOnly(), intake.halfWay()),
+                  intake.oscillate(),
                   Commands.waitSeconds(5)),
               Commands.race(
                   Commands.sequence(
@@ -104,7 +104,7 @@ public class Autos {
                   shooter.getHood().stowCommand()),
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB),
-                  Commands.repeatingSequence(intake.extendOnly(), intake.halfWay()),
+                  intake.oscillate(),
                   Commands.waitSeconds(5)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {

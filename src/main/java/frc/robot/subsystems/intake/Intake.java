@@ -14,6 +14,7 @@ import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
@@ -132,6 +133,10 @@ public class Intake extends SubsystemBase {
   public Command extendOnly() {
     return startRun(() -> slapDownMotor.setControl(mmOut.withPosition(outPosition.get())), () -> {})
         .until(() -> slapDownMotor.atSetpoint(holdPosition.get(), tolerance.get()));
+  }
+
+  public Command oscillate() {
+    return Commands.repeatingSequence(this.extendOnly(), this.halfWay());
   }
 
   @Override

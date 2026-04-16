@@ -89,7 +89,8 @@ public class Robot extends LoggedRobot {
     DriverStation.silenceJoystickConnectionWarning(true);
 
     if (Constants.tuningMode) {
-      new Alert("Tuning Mode Enabled", AlertType.kInfo).set(true);;
+      new Alert("Tuning Mode Enabled", AlertType.kInfo).set(true);
+      ;
     }
 
     // Instantiate our RobotContainer. This will perform all our button bindings,

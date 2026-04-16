@@ -239,6 +239,8 @@ public class RobotContainer {
         .or(coDriveController.povDown())
         .whileTrue(shooter.getHood().stowCommand());
 
+    driveController.povRight().or(coDriveController.povRight()).whileTrue(intake.oscillate());
+
     driveController
         .start()
         .or(coDriveController.start())
