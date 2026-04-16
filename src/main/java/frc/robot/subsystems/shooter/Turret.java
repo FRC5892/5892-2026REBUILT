@@ -157,7 +157,7 @@ public class Turret extends SubsystemBase {
     // Preload so AdvantageKit can process logging stuff before the match starts.
     ShotCalculator.getInstance().calculateShot();
     // Home if not already homed
-    RobotModeTriggers.disabled().negate().and(() -> !this.isHomed()).onTrue(homingCommand());
+    RobotModeTriggers.teleop().and(() -> !this.isHomed()).onTrue(homingCommand());
     setDefaultCommand(aimCommand());
   }
 
