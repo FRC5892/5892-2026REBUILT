@@ -88,6 +88,10 @@ public class Robot extends LoggedRobot {
 
     DriverStation.silenceJoystickConnectionWarning(true);
 
+    if (Constants.tuningMode) {
+      new Alert("Tuning Mode Enabled", AlertType.kInfo).set(true);;
+    }
+
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
