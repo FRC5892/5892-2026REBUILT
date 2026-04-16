@@ -49,16 +49,16 @@ public class Autos {
                   ShootCommands.shoot(indexer, shooter, Goal.HUB),
                   Commands.waitSeconds(7),
                   Commands.sequence(Commands.waitSeconds(3.5), intake.hold())),
-                  Commands.race(
-                      Commands.sequence(
-                          AutoBuilder.followPath(loadPath("Left_Path", points)),
-                          AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
-                      intake.intakeSequence(),
-                      shooter.getHood().stowCommand()),
-                  Commands.race(
-                      ShootCommands.shoot(indexer, shooter, Goal.HUB),
-                      Commands.waitSeconds(7),
-                      Commands.sequence(Commands.waitSeconds(3.5), intake.hold())));
+              Commands.race(
+                  Commands.sequence(
+                      AutoBuilder.followPath(loadPath("Left_Path", points)),
+                      AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
+                  intake.intakeSequence(),
+                  shooter.getHood().stowCommand()),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  Commands.waitSeconds(7),
+                  Commands.sequence(Commands.waitSeconds(3.5), intake.hold())));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
