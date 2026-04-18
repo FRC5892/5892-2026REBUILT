@@ -128,7 +128,7 @@ public class Autos {
         .andThen(ShootCommands.shoot(indexer, shooter).withTimeout(7));
   }
 
-    public static Command depotAuto(Intake intake, Indexer indexer, Shooter shooter) {
+  public static Command depotAuto(Intake intake, Indexer indexer, Shooter shooter) {
     try {
       final ArrayList<PathPoint> points;
       if (Constants.currentMode == Constants.Mode.SIM) {
@@ -154,8 +154,7 @@ public class Autos {
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB),
                   intake.oscillate(),
-                  Commands.waitSeconds(5))
-          );
+                  Commands.waitSeconds(5)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
