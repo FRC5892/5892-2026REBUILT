@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
   private final LoggedTalonFX rollerMotor;
   private final LoggedTalonFX slapDownMotor;
   private final LoggedTunableNumber rollerSpeed =
-      new LoggedTunableNumber("IntakeRoller/Speed", -0.9, "%");
+      new LoggedTunableNumber("IntakeRoller/Speed", -1, "%");
   // private final LoggedTunableNumber unjamThreshold =
   //     new LoggedTunableNumber("IntakeRoller/UnjamThreshold", 100, "amp");
   // private final LoggedTunableNumber unjamSpeed =
