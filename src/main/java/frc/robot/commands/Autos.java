@@ -85,14 +85,17 @@ public class Autos {
       // Boilerplate is over. Now do the actual logic
       final Command auto =
           Commands.sequence(
-              Commands.waitSeconds(5),
+              shooter.getTurret().homingCommand(),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  intake.oscillate(),
+                  Commands.waitSeconds(4)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Right_Path_Start", points)),
                       AutoBuilder.followPath(loadPath("Right_Path_Return", points))),
                   intake.intakeSequence(),
                   shooter.getHood().stowCommand()),
-              shooter.getTurret().homingCommand(),
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB),
                   intake.oscillate(),
