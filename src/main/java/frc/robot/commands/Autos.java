@@ -85,7 +85,7 @@ public class Autos {
       // Boilerplate is over. Now do the actual logic
       final Command auto =
           Commands.sequence(
-            Commands.waitSeconds(5),
+              Commands.waitSeconds(5),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Right_Path_Start", points)),
