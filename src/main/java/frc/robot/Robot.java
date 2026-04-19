@@ -9,11 +9,14 @@ package frc.robot;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.FollowPathCommand;
+import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.PhoenixUtil;
+import java.io.File;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -54,6 +57,13 @@ public class Robot extends LoggedRobot {
         // Running on a real robot, log to a USB stick ("/U/logs")
         Logger.addDataReceiver(new WPILOGWriter());
         Logger.addDataReceiver(new NT4Publisher());
+        var logFolder = new File("/U/logs");
+        // 5892
+        if (!logFolder.canWrite() || !logFolder.isDirectory()) {
+          new Alert("Failed to access log file", AlertType.kError).set(true);
+          ;
+        }
+
         break;
 
       case SIM:
@@ -77,6 +87,11 @@ public class Robot extends LoggedRobot {
     SignalLogger.enableAutoLogging(false);
 
     DriverStation.silenceJoystickConnectionWarning(true);
+
+    if (Constants.tuningMode) {
+      new Alert("Tuning Mode Enabled", AlertType.kInfo).set(true);
+      ;
+    }
 
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.

@@ -168,6 +168,7 @@ public class RobotContainer {
     autoChooser.addOption("Left Auto", Autos.leftAuto(intake, indexer, shooter));
     autoChooser.addOption("Right Auto", Autos.rightAuto(intake, indexer, shooter));
     autoChooser.addOption("Preload Auto", ShootCommands.shoot(indexer, shooter));
+    autoChooser.addOption("Depot Auto", Autos.depotAuto(intake, indexer, shooter));
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -238,6 +239,8 @@ public class RobotContainer {
         .povDown()
         .or(coDriveController.povDown())
         .whileTrue(shooter.getHood().stowCommand());
+
+    driveController.povRight().or(coDriveController.povRight()).whileTrue(intake.oscillate());
 
     driveController
         .start()

@@ -44,7 +44,7 @@ public class Flywheel extends SubsystemBase {
                     .withPeakForwardTorqueCurrent(40)
                     .withPeakReverseTorqueCurrent(0))
             .withMotorOutput(
-                new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive))
+                new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive))
             .withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(24.0 / 30.0))
             .withSlot0(
                 new Slot0Configs()

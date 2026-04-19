@@ -14,6 +14,7 @@ import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import edu.wpi.first.units.measure.MutAngle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.LoggedTalon.TalonFX.LoggedTalonFX;
@@ -24,7 +25,7 @@ public class Intake extends SubsystemBase {
   private final LoggedTalonFX rollerMotor;
   private final LoggedTalonFX slapDownMotor;
   private final LoggedTunableNumber rollerSpeed =
-      new LoggedTunableNumber("IntakeRoller/Speed", -0.9, "%");
+      new LoggedTunableNumber("IntakeRoller/Speed", -1, "%");
   // private final LoggedTunableNumber unjamThreshold =
   //     new LoggedTunableNumber("IntakeRoller/UnjamThreshold", 100, "amp");
   // private final LoggedTunableNumber unjamSpeed =
@@ -74,6 +75,12 @@ public class Intake extends SubsystemBase {
         () -> rollerMotor.setControl(dutyCycleOut.withOutput(0)));
   }
 
+  /**
+   * Extend until setpoint, then retract?? TODO: Stop using this function
+   *
+   * @return
+   */
+  @Deprecated
   public Command extendCommand() {
     return startEnd(
             () -> {
@@ -101,9 +108,35 @@ public class Intake extends SubsystemBase {
     return extendCommand().andThen(intakeCommand());
   }
 
+  /**
+   * Hold at 45 forever TODO: Stop using this function
+   *
+   * @return
+   */
+  @Deprecated
   public Command hold() {
     return startRun(
         () -> slapDownMotor.setControl(mmOut.withPosition(holdPosition.get())), () -> {});
+  }
+
+  public Command halfWay() {
+    return startRun(
+            () -> slapDownMotor.setControl(mmOut.withPosition(holdPosition.get())), () -> {})
+        .until(() -> slapDownMotor.atSetpoint(holdPosition.get(), tolerance.get()));
+  }
+
+  /**
+   * Extend until setpoint is achieved
+   *
+   * @return
+   */
+  public Command extendOnly() {
+    return startRun(() -> slapDownMotor.setControl(mmOut.withPosition(outPosition.get())), () -> {})
+        .until(() -> slapDownMotor.atSetpoint(outPosition.get(), tolerance.get()));
+  }
+
+  public Command oscillate() {
+    return Commands.repeatingSequence(this.extendOnly(), this.halfWay());
   }
 
   @Override

@@ -91,10 +91,15 @@ public class Turret extends SubsystemBase {
 
   /** Difference between Turret 0 and robot forward. This needs to be fairly precise */
   private final LoggedTunableMeasure<MutAngle> offset =
-      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(73.5));
+      new LoggedTunableMeasure<MutAngle>("Turret/Offset", Degrees.mutable(68.5));
 
+  /**
+   * Static position toggleable from DS. This is activated when aiming is requested and
+   * SmartDashboard/TurretStatic is set to true
+   */
   private final LoggedTunableMeasure<MutAngle> staticPose =
-      new LoggedTunableMeasure<MutAngle>("Turret/StaticPose", Degrees.mutable(0));
+      new LoggedTunableMeasure<MutAngle>("Turret/StaticPose", offset.get().mutableCopy());
+
   /* Control Requests */
   private final MotionMagicDutyCycle mmControl = new MotionMagicDutyCycle(0);
   private final NeutralOut neutralControl = new NeutralOut();
@@ -152,7 +157,7 @@ public class Turret extends SubsystemBase {
     // Preload so AdvantageKit can process logging stuff before the match starts.
     ShotCalculator.getInstance().calculateShot();
     // Home if not already homed
-    RobotModeTriggers.disabled().negate().and(() -> !this.isHomed()).onTrue(homingCommand());
+    RobotModeTriggers.teleop().and(() -> !this.isHomed()).onTrue(homingCommand());
     setDefaultCommand(aimCommand());
   }
 

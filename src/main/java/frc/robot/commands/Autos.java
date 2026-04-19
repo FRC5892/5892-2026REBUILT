@@ -44,8 +44,11 @@ public class Autos {
                       AutoBuilder.followPath(loadPath("Left_Path_Return", points))),
                   intake.intakeSequence(),
                   shooter.getHood().stowCommand()),
+              shooter.getTurret().homingCommand(),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  intake.oscillate(),
+                  Commands.waitSeconds(5)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Left_Path", points)),
@@ -53,7 +56,9 @@ public class Autos {
                   intake.intakeSequence(),
                   shooter.getHood().stowCommand()),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)));
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  intake.oscillate(),
+                  Commands.waitSeconds(5)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
@@ -80,6 +85,11 @@ public class Autos {
       // Boilerplate is over. Now do the actual logic
       final Command auto =
           Commands.sequence(
+              shooter.getTurret().homingCommand(),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  intake.oscillate(),
+                  Commands.waitSeconds(4)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Right_Path_Start", points)),
@@ -87,7 +97,9 @@ public class Autos {
                   intake.intakeSequence(),
                   shooter.getHood().stowCommand()),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)),
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  intake.oscillate(),
+                  Commands.waitSeconds(10)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Right_Path", points)),
@@ -95,7 +107,9 @@ public class Autos {
                   intake.intakeSequence(),
                   shooter.getHood().stowCommand()),
               Commands.race(
-                  ShootCommands.shoot(indexer, shooter, Goal.HUB), Commands.waitSeconds(7)));
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  intake.oscillate(),
+                  Commands.waitSeconds(5)));
       // More boilerplate
       if (Constants.currentMode == Constants.Mode.SIM) {
         Logger.recordOutput(
@@ -112,7 +126,52 @@ public class Autos {
   }
 
   public static Command preload(Indexer indexer, Shooter shooter) {
-    return ShootCommands.shoot(indexer, shooter).withTimeout(7);
+    return shooter
+        .getTurret()
+        .homingCommand()
+        .andThen(ShootCommands.shoot(indexer, shooter).withTimeout(7));
+  }
+
+  public static Command depotAuto(Intake intake, Indexer indexer, Shooter shooter) {
+    try {
+      final ArrayList<PathPoint> points;
+      if (Constants.currentMode == Constants.Mode.SIM) {
+        points = new ArrayList<>();
+      } else {
+        points = null;
+      }
+      // Boilerplate is over. Now do the actual logic
+      final Command auto =
+          Commands.sequence(
+              AutoBuilder.followPath(loadPath("Depot_Preload", points)),
+              shooter.getTurret().homingCommand(),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  intake.oscillate(),
+                  Commands.waitSeconds(5)),
+              Commands.race(
+                  Commands.sequence(
+                      AutoBuilder.followPath(loadPath("Depot_Depot", points)),
+                      AutoBuilder.followPath(loadPath("Depot_Shoot", points))),
+                  intake.intakeSequence(),
+                  shooter.getHood().stowCommand()),
+              Commands.race(
+                  ShootCommands.shoot(indexer, shooter, Goal.HUB),
+                  intake.oscillate(),
+                  Commands.waitSeconds(5)));
+      // More boilerplate
+      if (Constants.currentMode == Constants.Mode.SIM) {
+        Logger.recordOutput(
+            "Autos/Depot", points.stream().map(m -> m.position).toArray(Translation2d[]::new));
+      }
+      return auto;
+    } catch (Exception e) {
+      @SuppressWarnings("resource")
+      Alert alert = new Alert("Failed to load Left Auto", AlertType.kError);
+      alert.set(true);
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+      return Commands.none();
+    }
   }
 
   public static PathPlannerPath loadPath(String name, List<PathPoint> points)
