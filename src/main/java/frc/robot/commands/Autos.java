@@ -89,7 +89,7 @@ public class Autos {
               Commands.race(
                   ShootCommands.shoot(indexer, shooter, Goal.HUB),
                   intake.oscillate(),
-                  Commands.waitSeconds(4)),
+                  Commands.waitSeconds(3)),
               Commands.race(
                   Commands.sequence(
                       AutoBuilder.followPath(loadPath("Right_Path_Start", points)),
